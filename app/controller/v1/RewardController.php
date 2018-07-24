@@ -10,36 +10,21 @@
 namespace App\controller\v1;
 
 
+use App\model\asset\AssetModel;
 use App\model\mining\MiningModel;
+use App\model\reward\RewardModel;
 
 class RewardController extends BaseController
 {
     //糖果记录
     public function list()
     {
-        //1、做任务奖励TB
-        //2、邀请好友奖励TB
-        //3、挖矿奖励TB
         $waitList = (new MiningModel())->getMiningList($this->userId);
-        $rewardList = [
-            [
-                'icon' => '',
-                'reward_type' => '签到',
-                'currency_name' => 'TB',
-                'currency_number' => 0.001,
-                'time' => '12分钟前'
-            ],
-            [
-                'icon' => '',
-                'reward_type' => '签到',
-                'currency_name' => 'TB',
-                'currency_number' => 0.001,
-                'time' => '12分钟前'
-            ],
-        ];
+        $rewardList = (new RewardModel())->getRewardList($this->userId);
+        $tbAsset = (new AssetModel())->getAssetByUserId($this->userId, 1);
         $data = [
-            'currency_name' => 'tb',
-            'currency_number' => 121,
+            'currency_name' => $tbAsset['0']['currency_name'] ?? '',
+            'currency_number' => !empty($tbAsset['0']['currency_number']) ? floatval($tbAsset['0']['currency_number']) : 0.0,
             'reward_list' => $rewardList,
             'wait_list' => $waitList
         ];

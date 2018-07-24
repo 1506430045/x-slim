@@ -89,6 +89,7 @@ class UserModel
         $redis = RedisModel::getInstance(RedisConfig::$baseConfig)->redis;
         $re1 = $redis->setnx($key, $smsCode);
         $re2 = false;
+        $ttl = 3600;    //todo
         if ($re1) {
             $re2 = $redis->expire($key, $ttl);
         }

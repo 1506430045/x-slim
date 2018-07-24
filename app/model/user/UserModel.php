@@ -117,6 +117,7 @@ class UserModel extends BaseModel
                 $userInfo['phone'] = $phoneEncrypt;
                 (new redis\UserModel)->setOpenUserInfo($openId, $userInfo);
             }
+            return $rowCount;
         } catch (\Exception $e) {
             return 0;
         }

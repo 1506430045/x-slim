@@ -38,7 +38,7 @@ class RewardModel extends BaseModel
      */
     public function createRewardRecord($userId, int $rewardType, int $foreignId, array $currency)
     {
-        $sql1 = "INSERT INTO `{$this->table}` (reward_type, foreign_id, currency_id, currency_name, currency_number) VALUES ({$rewardType}, {$foreignId}, {$currency['currency_id']}, '{$currency['currency_name']}', {$currency['currency_number']})";
+        $sql1 = "INSERT INTO `{$this->table}` (user_id, reward_type, foreign_id, currency_id, currency_name, currency_number) VALUES ({$userId}, {$rewardType}, {$foreignId}, {$currency['currency_id']}, '{$currency['currency_name']}', {$currency['currency_number']})";
         $sql2 = "UPDATE `candy_asset` SET currency_number = currency_number + {$currency['currency_number']} WHERE user_id = {$userId} AND currency_id = {$currency['currency_id']} LIMIT 1";
 
         $sql = [
@@ -46,5 +46,63 @@ class RewardModel extends BaseModel
             $sql2
         ];
         return PdoModel::getInstance(MysqlConfig::$baseConfig)->executeTransaction($sql);
+    }
+
+    /**
+     * 获取奖励列表
+     *
+     * @param int $userId
+     * @return array
+     */
+    public function getRewardList(int $userId)
+    {
+        try {
+            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
+                ->where('user_id', '=', $userId)
+                ->order('id desc')
+                ->getList(['id', 'reward_type', 'foreign_id', 'currency_name', 'currency_number', 'created_at']);
+            if (empty($list)) {
+                return [];
+            }
+            $rewardTypeMap = $this->formatRewardType($list);
+            foreach ($list as &$v) {
+                $id = $v['id'];
+                $v['reward_type'] = $rewardTypeMap[$id] ?? '任务奖励';
+                unset($v['id']);
+            }
+            return $list;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * 格式化奖励类型
+     *
+     * @param array $rewardList
+     * @return array
+     */
+    private function formatRewardType(array $rewardList = [])
+    {
+        if (empty($rewardList)) {
+            return [];
+        }
+        $result = [];
+        foreach ($rewardList as $v) {
+            $id = $v['id'];
+            $rewardType = $v['reward_type'];
+            $rewardTypeStr = '任务奖励';
+            if ($rewardType === self::REWARD_TYPE_2) {
+                $rewardTypeStr = '挖矿';
+            }
+            if ($rewardType === self::REWARD_TYPE_3) {
+                $rewardTypeStr = '邀请用户';
+            }
+            if ($rewardType === self::REWARD_TYPE_1) {
+                $rewardTypeStr = '任务';
+            }
+            $result[$id] = $rewardTypeStr;
+        }
+        return $result;
     }
 }

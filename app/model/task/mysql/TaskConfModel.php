@@ -55,9 +55,10 @@ class TaskConfModel
     public function getTaskConfById(int $id)
     {
         try {
-            $task = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table);
-            return $task->where('id', '=', $id)->getRow();
+            $task = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('id', '=', $id)->getRow();
+            return $task;
         } catch (\Exception $e) {
+            exit(json_encode($e->getMessage()));
             return [];
         }
     }

@@ -67,15 +67,20 @@ class AssetModel extends BaseModel
      * 获取用户资产列表
      *
      * @param int $userId
+     * @param int $currencyId
      * @return array
      */
-    public function getAssetByUserId(int $userId)
+    public function getAssetByUserId(int $userId, $currencyId = 0)
     {
         $currencyList = (new CurrencyModel())->getCurrencyList();   //货币配置
 
         $fields = ['id', 'currency_id', 'currency_number'];
         try {
-            $assetList = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('user_id', '=', $userId)->getList($fields);
+            $pdo = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('user_id', '=', $userId);
+            if (!empty($currencyId)) {
+                $pdo->where('currency_id', '=', $currencyId);
+            }
+            $assetList = $pdo->getList($fields);
         } catch (\Exception $e) {
             return [];
         }

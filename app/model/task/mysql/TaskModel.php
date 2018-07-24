@@ -63,11 +63,11 @@ class TaskModel
     /**
      * 绑定手机任务
      *
-     * @param $userId
+     * @param int $userId
      * @param array $taskConf
      * @return int
      */
-    public function bindPhone($userId, array $taskConf = [])
+    public function bindPhone(int $userId, array $taskConf = [])
     {
         if (empty($userId) || empty($taskConf)) {
             return 0;
@@ -77,6 +77,7 @@ class TaskModel
             'conf_id' => $taskConf['id'],
             'task_type' => $taskConf['task_type'],
             'task_status' => self::TASK_STATUS_4,
+            'currency_id' => $taskConf['currency_id'],
             'currency_name' => $taskConf['currency_name'],
             'currency_number' => $taskConf['currency_number'],
             'created_date' => date('Y-m-d', $_SERVER['REQUEST_TIME']),

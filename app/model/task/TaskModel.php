@@ -114,8 +114,8 @@ class TaskModel
         if ($id) {
             $currency = [
                 'currency_id' => $taskConf['currency_id'],
-                'currency_name' => $taskConf['currency_id'],
-                'currency_number' => $taskConf['currency_id']
+                'currency_name' => $taskConf['currency_name'],
+                'currency_number' => $taskConf['currency_number']
             ];
             (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
         }
