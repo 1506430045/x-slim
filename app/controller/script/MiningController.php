@@ -13,7 +13,6 @@ namespace App\controller\script;
 use App\model\mining\MiningModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
-use function GuzzleHttp\Psr7\str;
 
 class MiningController
 {

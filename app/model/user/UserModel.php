@@ -11,7 +11,6 @@ namespace App\model\user;
 
 use App\model\asset\AssetModel;
 use App\model\invite\InviteModel;
-use App\model\reward\RewardModel;
 use App\model\user\InviteModel as UserInviteModel;
 use App\model\BaseModel;
 use App\model\PdoModel;
@@ -223,16 +222,20 @@ class UserModel extends BaseModel
     }
 
     /**
-     * 获取邀请列表
+     * 批量获取用户信息
      *
-     * @param int $userId
+     * @param array $userIds
+     * @param array $fileds
      * @return array
      */
-    public function getInviteList(int $userId)
+    public function getUsersByUserIds(array $userIds, array $fileds = [])
     {
-        $fileds = ['created_at', 'nickname'];
         try {
-            return PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->where('inviter', '=', $userId)->getList($fileds);
+            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->whereIn('id', $userIds)->getList($fileds);
+            if (empty($list)) {
+                return [];
+            }
+            return array_combine(array_column($list, 'id'), $list);
         } catch (\Exception $e) {
             return [];
         }

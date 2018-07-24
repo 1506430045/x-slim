@@ -14,6 +14,7 @@ use App\model\BaseModel;
 use App\model\PdoModel;
 use App\model\reward\RewardModel;
 use App\model\task\mysql\TaskConfModel;
+use App\model\user\UserModel;
 use Config\db\MysqlConfig;
 
 class InviteModel extends BaseModel
@@ -88,6 +89,34 @@ class InviteModel extends BaseModel
             }
         } catch (\Exception $e) {
             return 0;
+        }
+    }
+
+    /**
+     * 获取邀请列表
+     *
+     * @param int $inviter
+     * @return array
+     */
+    public function getInviteList(int $inviter)
+    {
+        try {
+            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
+                ->where('inviter', '=', $inviter)
+                ->getList(['invitee', 'currency_name', 'currency_number', 'invite_status', 'created_at']);
+            if (empty($list)) {
+                return [];
+            }
+            $userIds = array_column($list, 'invitee');
+            $userList = (new UserModel)->getUsersByUserIds($userIds);
+            foreach ($list as &$v) {
+                $userId = $v['invitee'];
+                $v['nickname'] = $userList[$userId]['nickname'] ?? '';
+                $v['avatar_url'] = $userList[$userId]['avatar_url'] ?? '';
+            }
+            return $list;
+        } catch (\Exception $e) {
+            return [];
         }
     }
 }

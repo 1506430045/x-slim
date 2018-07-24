@@ -10,16 +10,16 @@
 namespace App\controller\v1;
 
 
-use App\model\asset\AssetModel;
-use App\model\user\InviteModel;
+use App\model\user\InviteModel as UserInviteModel;
 use App\model\user\UserModel;
+use App\model\invite\InviteModel;
 
 class InviteController extends BaseController
 {
     //获取邀请码
     public function inviteCode()
     {
-        $inviteCode = InviteModel::createInviteCode($this->userId);
+        $inviteCode = UserInviteModel::createInviteCode($this->userId);
 
         (new UserModel())->bindInviteCode($this->userId, $this->openId, $inviteCode);
 
@@ -32,31 +32,11 @@ class InviteController extends BaseController
     //邀请列表
     public function list()
     {
-        $inviteList = (new UserModel())->getInviteList($this->userId);
-        exit(json_encode($inviteList));
+        $inviteList = (new InviteModel())->getInviteList($this->userId);
         $data = [
-            'invite_people' => 11,
-            'invite_reward' => 10,
-            'invite_list' => [
-                [
-                    'created_at' => date('Y.m.d H:i'),
-                    'currency_name' => 'TB',
-                    'currency_number' => 101.1,
-                    'friend_name' => 'xxixi'
-                ],
-                [
-                    'created_at' => date('Y.m.d H:i'),
-                    'currency_name' => 'TB',
-                    'currency_number' => 101.1,
-                    'friend_name' => 'xxixi'
-                ],
-                [
-                    'created_at' => date('Y.m.d H:i'),
-                    'currency_name' => 'TB',
-                    'currency_number' => 101.1,
-                    'friend_name' => 'xxixi'
-                ]
-            ]
+            'invite_people' => count($inviteList),
+            'invite_reward' => array_sum(array_column($inviteList, 'currency_number')),
+            'invite_list' => $inviteList
         ];
         $this->renderJson(0, 'success', $data);
     }
