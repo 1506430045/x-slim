@@ -31,13 +31,43 @@ class TaskModel
     }
 
     /**
-     * 签到
+     * 签到任务
      *
      * @param $userId
      * @param array $taskConf
      * @return int
      */
     public function signIn($userId, array $taskConf = [])
+    {
+        if (empty($userId) || empty($taskConf)) {
+            return 0;
+        }
+        $data = [
+            'user_id' => $userId,
+            'conf_id' => $taskConf['id'],
+            'task_type' => $taskConf['task_type'],
+            'task_status' => self::TASK_STATUS_4,
+            'currency_name' => $taskConf['currency_name'],
+            'currency_number' => $taskConf['currency_number'],
+            'created_date' => date('Y-m-d', $_SERVER['REQUEST_TIME']),
+            'start_time' => $_SERVER['REQUEST_TIME'],
+            'finish_time' => $_SERVER['REQUEST_TIME']
+        ];
+        try {
+            return PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->insert($data);
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * 绑定手机任务
+     *
+     * @param $userId
+     * @param array $taskConf
+     * @return int
+     */
+    public function bindPhone($userId, array $taskConf = [])
     {
         if (empty($userId) || empty($taskConf)) {
             return 0;

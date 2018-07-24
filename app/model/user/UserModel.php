@@ -11,6 +11,7 @@ namespace App\model\user;
 
 use App\model\asset\AssetModel;
 use App\model\invite\InviteModel;
+use App\model\task\TaskModel;
 use App\model\user\InviteModel as UserInviteModel;
 use App\model\BaseModel;
 use App\model\PdoModel;
@@ -111,6 +112,7 @@ class UserModel extends BaseModel
                     (new InviteModel())->inviteReward($userInfo['inviter'], $userId);
                 }
                 //绑定手机需要给用户奖励 todo
+                (new TaskModel())->createBindPhoneTask($userId);
                 //保存手机信息到redis
                 $userInfo['phone'] = $phoneEncrypt;
                 (new redis\UserModel)->setOpenUserInfo($openId, $userInfo);

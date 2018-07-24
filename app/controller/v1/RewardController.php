@@ -21,7 +21,6 @@ class RewardController extends BaseController
         //2、邀请好友奖励TB
         //3、挖矿奖励TB
         $waitList = (new MiningModel())->getMiningList($this->userId);
-//        exit(json_encode($waitList));
         $rewardList = [
             [
                 'icon' => '',
@@ -36,23 +35,6 @@ class RewardController extends BaseController
                 'currency_name' => 'TB',
                 'currency_number' => 0.001,
                 'time' => '12分钟前'
-            ],
-        ];
-        $waitList = [
-            [
-                'currency_name' => 'TB',
-                'currency_number' => 0.1,
-                'time' => 21
-            ],
-            [
-                'currency_name' => 'TB',
-                'currency_number' => 0.1,
-                'time' => 21
-            ],
-            [
-                'currency_name' => 'TB',
-                'currency_number' => 0.1,
-                'time' => 21
             ],
         ];
         $data = [

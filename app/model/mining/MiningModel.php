@@ -44,7 +44,7 @@ class MiningModel extends BaseModel
                 ->where('mining_status', '=', self::MINING_STATUS_1)
 //                ->where('effective_time', '<=', $now)
                 ->where('dead_time', '>', $now)
-                ->getList(['id', 'currency_id', 'currency_name', 'currency_number', 'effective_time']);
+                ->getList(['id', 'currency_name', 'currency_number', 'effective_time']);
             if (empty($list)) {
                 return [];
             }

@@ -10,6 +10,7 @@
 namespace App\model\task;
 
 
+use App\model\reward\RewardModel;
 use App\model\task\mysql\TaskConfModel;
 use App\model\task\mysql\TaskModel as MysqlTaskModel;
 use App\model\user\redis\UserModel as RedisUserModel;
@@ -71,7 +72,7 @@ class TaskModel
     }
 
     /**
-     * 签到
+     * 签到生成任务
      *
      * @param string $openId
      * @param int $userId
@@ -88,6 +89,36 @@ class TaskModel
             return 0;
         }
         $taskConf = $this->getTaskConfById(TaskConfModel::TASK_CONF_ID_1);
-        return (new MysqlTaskModel)->signIn($userInfo['id'], $taskConf);
+        $id = (new MysqlTaskModel)->signIn($userInfo['id'], $taskConf);
+        if ($id) {
+            $currency = [
+                'currency_id' => $taskConf['currency_id'],
+                'currency_name' => $taskConf['currency_id'],
+                'currency_number' => $taskConf['currency_id']
+            ];
+            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
+        }
+        return $id;
+    }
+
+    /**
+     * 绑定手机生成任务
+     *
+     * @param int $userId
+     * @return int
+     */
+    public function createBindPhoneTask(int $userId)
+    {
+        $taskConf = $this->getTaskConfById(TaskConfModel::TASK_CONF_ID_3);
+        $id = (new MysqlTaskModel)->bindPhone($userId, $taskConf);
+        if ($id) {
+            $currency = [
+                'currency_id' => $taskConf['currency_id'],
+                'currency_name' => $taskConf['currency_id'],
+                'currency_number' => $taskConf['currency_id']
+            ];
+            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
+        }
+        return $id;
     }
 }
