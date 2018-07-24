@@ -1,0 +1,30 @@
+<?php
+/**
+ * 任务
+ *
+ * User: forward
+ * Date: 2018/7/17
+ * Time: 下午2:31
+ */
+
+namespace App\controller\v1;
+
+
+use App\model\task\TaskModel;
+
+class TaskController extends BaseController
+{
+    //任务列表
+    public function list()
+    {
+        list($normalList, $advancedList) = (new TaskModel())->getTaskConfList();
+
+        $data = [
+            'normal_number' => count($normalList),
+            'advanced_number' => count($advancedList),
+            'normal_list' => $normalList,
+            'advanced_list' => $advancedList
+        ];
+        $this->renderJson(0, 'success', $data);
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "require": {
+    "slim/slim": "^3.0",
+    "guzzlehttp/guzzle": "^6.3",
+    "phpaes/phpaes": "^3.1",
+    "aws/aws-sdk-php": "3.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/",
+      "Util\\": "util/",
+      "Config\\": "config/"
+    }
+  }
+}
