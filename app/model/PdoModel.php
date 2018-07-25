@@ -131,13 +131,14 @@ class PdoModel
     {
         $fields = self::_parseFields($fields);
         try {
-            $parseWhere = self::_parseWhere($this->where);
+            $parseWhere = $this->_parseWhere($this->where);
             $sql = "SELECT {$fields} FROM `{$this->table}` WHERE {$parseWhere['whereStr']} LIMIT 1";
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute($parseWhere['bindArr']);
             $this->resetCondition();
             return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
+            $this->resetCondition();
             return [];
         }
     }
@@ -198,13 +199,14 @@ class PdoModel
     {
         $fields = self::_parseFields($fields);
         try {
-            $parseWhere = self::_parseWhere($this->where);
+            $parseWhere = $this->_parseWhere($this->where);
             $sql = "SELECT {$fields} FROM `{$this->table}` WHERE {$parseWhere['whereStr']} ORDER BY {$this->order} LIMIT {$this->skip}, {$this->limit}";
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute($parseWhere['bindArr']);
             $this->resetCondition();
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
+            $this->resetCondition();
             return [];
         }
     }
@@ -247,12 +249,14 @@ class PdoModel
     public function delete()
     {
         try {
-            $parseWhere = self::_parseWhere($this->where);
+            $parseWhere = $this->_parseWhere($this->where);
             $sql = "DELETE FROM `{$this->table}` WHERE {$parseWhere['whereStr']}";
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute($parseWhere['bindArr']);
+            $this->resetCondition();
             return $stmt->rowCount();
         } catch (\PDOException $e) {
+            $this->resetCondition();
             return 0;
         }
     }
@@ -268,13 +272,15 @@ class PdoModel
     {
         try {
             $parseUpdate = self::_parseUpdate($update);
-            $parseWhere = self::_parseWhere($this->where);
+            $parseWhere = $this->_parseWhere($this->where);
             $sql = "UPDATE `{$this->table}` SET {$parseUpdate['whereStr']} WHERE {$parseWhere['whereStr']}";
             $stmt = $this->dbh->prepare($sql);
             $bindArr = array_merge($parseUpdate['bindArr'], $parseWhere['bindArr']);
             $stmt->execute($bindArr);
+            $this->resetCondition();
             return $stmt->rowCount();
         } catch (\PDOException $e) {
+            $this->resetCondition();
             return 0;
         }
     }
@@ -293,12 +299,14 @@ class PdoModel
             $sql = "INSERT INTO `{$this->table}` ({$parseInsert['keyStr']}) VALUES ({$parseInsert['bindKeyStr']})";
             $stmt = $this->dbh->prepare($sql);
             $re = $stmt->execute($parseInsert['bindArr']);
+            $this->resetCondition();
             return $re ? intval($this->dbh->lastInsertId()) : 0;
         } catch (\PDOException $e) {
             if ($e->getCode() === '23000') {
                 return -1;
             }
             LoggerUtil::getInstance()->notice($e->getMessage(), ['method' => __METHOD__, 'params' => $arr]);
+            $this->resetCondition();
             return 0;
         }
     }
@@ -347,7 +355,7 @@ class PdoModel
      * @return array
      * @throws \Exception
      */
-    private static function _parseWhere(array $where)
+    private function _parseWhere(array $where)
     {
         if (empty($where)) {
             return [
@@ -374,6 +382,7 @@ class PdoModel
                 $bindArr[$bindKey] = $item['value'];
             }
         }
+        $this->where = [];
         return [
             'whereStr' => rtrim($whereStr, 'AND '),
             'bindArr' => $bindArr

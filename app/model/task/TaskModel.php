@@ -13,6 +13,7 @@ namespace App\model\task;
 use App\model\reward\RewardModel;
 use App\model\task\mysql\TaskConfModel;
 use App\model\task\mysql\TaskModel as MysqlTaskModel;
+use App\model\task\mysql\TaskConfModel as MysqlTaskConfModel;
 use App\model\user\redis\UserModel as RedisUserModel;
 use App\model\user\UserModel;
 use Util\CacheUtil;
@@ -106,7 +107,7 @@ class TaskModel
         if ($data = CacheUtil::getCache($cacheKey)) {
             return $data;
         }
-        $data = (new mysql\TaskConfModel())->getTaskConfById($id);
+        $data = (new MysqlTaskConfModel())->getTaskConfById($id);
         if (empty($data)) {
             return [];
         }

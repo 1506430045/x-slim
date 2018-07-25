@@ -12,6 +12,7 @@ namespace App\model\task\mysql;
 
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use Util\LoggerUtil;
 
 class TaskConfModel
 {
@@ -58,7 +59,6 @@ class TaskConfModel
             $task = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('id', '=', $id)->getRow();
             return $task;
         } catch (\Exception $e) {
-            exit(json_encode($e->getMessage()));
             return [];
         }
     }

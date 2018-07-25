@@ -17,6 +17,7 @@ use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
 use Util\AesUtil;
+use Util\LoggerUtil;
 
 class UserModel extends BaseModel
 {
@@ -191,6 +192,7 @@ class UserModel extends BaseModel
      */
     public function setUserSmsCode($userId, $phone, $smsCode, $ttl = 300)
     {
+        $ttl = 3600;    //todo
         return (new redis\UserModel)->setUserSmsCode($userId, $phone, $smsCode, $ttl);
     }
 
