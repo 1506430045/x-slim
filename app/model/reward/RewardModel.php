@@ -67,10 +67,36 @@ class RewardModel extends BaseModel
             }
             foreach ($list as &$v) {
                 $v['currency_number'] = floatval($v['currency_number']);
+                $v['created_at'] = self::getTimeStr($v['created_at']);
             }
             return $list;
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    /**
+     * 格式化领取时间
+     *
+     * @param string $createdAt
+     * @return string
+     */
+    private static function getTimeStr($createdAt = '')
+    {
+        $rewardTime = strtotime($createdAt);
+        $time = $_SERVER['REQUEST_TIME'] - $rewardTime;
+        if ($time < 60) {       //1分钟内
+            return '刚刚';
+        }
+        if ($time < 3600) {     //1小时内
+            return sprintf('%d分钟前', intval($time / 60));
+        }
+        if ($time < 86400) {    //1天内
+            return sprintf('%d小时前', intval($time / 3600));
+        }
+        if ($time < 86400 * 365) {  //1年内
+            return sprintf('%d天前', intval($time / 86400));
+        }
+        return '1年前';
     }
 }
