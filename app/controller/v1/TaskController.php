@@ -11,7 +11,6 @@ namespace App\controller\v1;
 
 
 use App\model\task\TaskModel;
-use App\model\user\UserModel;
 
 class TaskController extends BaseController
 {
