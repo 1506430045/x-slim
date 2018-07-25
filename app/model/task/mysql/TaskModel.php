@@ -18,10 +18,8 @@ class TaskModel
     const TASK_TYPE_1 = 1;  //普通任务
     const TASK_TYPE_2 = 2;  //高级任务
 
-    const TASK_STATUS_1 = 1;    //待派发
-    const TASK_STATUS_2 = 2;    //已派发
-    const TASK_STATUS_3 = 3;    //已开始
-    const TASK_STATUS_4 = 4;    //已完成
+    const TASK_STATUS_0 = 0;    //未完成
+    const TASK_STATUS_1 = 1;    //已完成
 
     private $table;
 
@@ -46,7 +44,7 @@ class TaskModel
             'user_id' => $userId,
             'conf_id' => $taskConf['id'],
             'task_type' => $taskConf['task_type'],
-            'task_status' => self::TASK_STATUS_4,
+            'task_status' => self::TASK_STATUS_1,
             'currency_name' => $taskConf['currency_name'],
             'currency_number' => $taskConf['currency_number'],
             'created_date' => date('Y-m-d', $_SERVER['REQUEST_TIME']),
@@ -76,7 +74,7 @@ class TaskModel
             'user_id' => $userId,
             'conf_id' => $taskConf['id'],
             'task_type' => $taskConf['task_type'],
-            'task_status' => self::TASK_STATUS_4,
+            'task_status' => self::TASK_STATUS_1,
             'currency_id' => $taskConf['currency_id'],
             'currency_name' => $taskConf['currency_name'],
             'currency_number' => $taskConf['currency_number'],
