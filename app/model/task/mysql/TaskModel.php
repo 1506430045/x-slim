@@ -49,9 +49,7 @@ class TaskModel
             'currency_id' => $taskConf['currency_id'],
             'currency_name' => $taskConf['currency_name'],
             'currency_number' => $taskConf['currency_number'],
-            'created_date' => date('Y-m-d', $_SERVER['REQUEST_TIME']),
-            'start_time' => $_SERVER['REQUEST_TIME'],
-            'finish_time' => $_SERVER['REQUEST_TIME']
+            'created_date' => date('Y-m-d', $_SERVER['REQUEST_TIME'])
         ];
         try {
             return PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->insert($data);

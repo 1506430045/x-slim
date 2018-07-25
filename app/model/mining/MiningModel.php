@@ -99,7 +99,7 @@ class MiningModel extends BaseModel
                     'currency_name' => $row['currency_name'],
                     'currency_number' => $row['currency_number']
                 ];
-                $create = (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_2, $miningId, $currency);
+                $create = (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_2, $miningId, $currency, '日常领取');
                 if (!$create) {
                     LoggerUtil::getInstance()->warning(sprintf('创建奖励记录失败，%s, $s', __METHOD__, json_encode(func_get_args())));
                 }

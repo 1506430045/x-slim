@@ -59,9 +59,10 @@ class InviteModel extends BaseModel
      *
      * @param $inviter
      * @param $invitee
+     * @param string $description
      * @return int
      */
-    public function inviteReward($inviter, $invitee)
+    public function inviteReward($inviter, $invitee, $description = '')
     {
         try {
             $row = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
@@ -85,7 +86,7 @@ class InviteModel extends BaseModel
                 ->where('invitee_status', '=', self::INVITE_STATUS_0)
                 ->update($data);
             if ($re) {
-                (new RewardModel)->createRewardRecord($inviter, self::REWARD_TYPE_3, $row);
+                (new RewardModel)->createRewardRecord($inviter, self::REWARD_TYPE_3, $row, $description);
             }
         } catch (\Exception $e) {
             return 0;

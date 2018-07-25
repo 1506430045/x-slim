@@ -112,7 +112,8 @@ class UserModel extends BaseModel
                 $userInfo = $this->getUserByOpenId($openId);
                 //是否是被邀请 是的话需要给邀请人奖励
                 if (!empty($userInfo['inviter'])) {
-                    (new InviteModel())->inviteReward($userInfo['inviter'], $userId);
+                    $description = sprintf("邀请%s", $userInfo['nickname']);
+                    (new InviteModel())->inviteReward($userInfo['inviter'], $userId, $description);
                 }
                 //绑定手机需要给用户奖励
                 (new TaskModel())->createBindPhoneTask($userId);

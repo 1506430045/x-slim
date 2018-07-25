@@ -37,7 +37,7 @@ class MiningController
         $currency = [
             'currency_id' => 1,
             'currency_name' => 'TB',
-            'currency_number' => round(self::USER_MINING_NUM_PER_DAY / count(self::MINING_CREATE_TIME), 8)
+            'currency_number' => round(self::USER_MINING_NUM_PER_DAY / count(self::MINING_CREATE_TIME), 18)
         ];
         while (true) {
             $userList = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->where('id', ">", $maxId)->limit(self::TASK_USER_NUM_PER_TIME)->getList(['id']);

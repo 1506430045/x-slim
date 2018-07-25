@@ -139,7 +139,7 @@ class TaskModel
                 'currency_name' => $taskConf['currency_name'],
                 'currency_number' => $taskConf['currency_number']
             ];
-            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
+            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency, '每日登录');
         }
         return $id;
     }
@@ -160,7 +160,7 @@ class TaskModel
                 'currency_name' => $taskConf['currency_name'],
                 'currency_number' => $taskConf['currency_number']
             ];
-            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
+            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency, '7日登录');
         }
         return $id;
     }
@@ -181,7 +181,7 @@ class TaskModel
                 'currency_name' => $taskConf['currency_name'],
                 'currency_number' => $taskConf['currency_number']
             ];
-            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
+            (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency, '绑定手机');
         }
         return $id;
     }
