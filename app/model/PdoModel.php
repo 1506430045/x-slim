@@ -133,7 +133,6 @@ class PdoModel
         try {
             $parseWhere = self::_parseWhere($this->where);
             $sql = "SELECT {$fields} FROM `{$this->table}` WHERE {$parseWhere['whereStr']} LIMIT 1";
-            LoggerUtil::getInstance()->info($sql);
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute($parseWhere['bindArr']);
             $this->resetCondition();

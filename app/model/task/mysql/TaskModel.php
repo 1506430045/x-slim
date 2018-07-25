@@ -45,6 +45,7 @@ class TaskModel
             'conf_id' => $taskConf['id'],
             'task_type' => $taskConf['task_type'],
             'task_status' => self::TASK_STATUS_1,
+            'currency_id' => $taskConf['currency_id'],
             'currency_name' => $taskConf['currency_name'],
             'currency_number' => $taskConf['currency_number'],
             'created_date' => date('Y-m-d', $_SERVER['REQUEST_TIME']),

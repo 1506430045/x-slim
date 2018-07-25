@@ -58,7 +58,7 @@ class UserController extends BaseController
     //签到
     public function signIn()
     {
-        (new TaskModel)->createSignInTask($this->openId, $this->userId);
+        (new TaskModel)->createSignInTask($this->userId);
         $this->renderJson(0, '签到成功');
     }
 

@@ -98,6 +98,7 @@ class AssetModel extends BaseModel
             $v['icon'] = $currencyInfo['currency_icon'];
             $v['currency_name'] = $currencyInfo['currency_name'];
             $v['description'] = $currencyInfo['currency_description'];
+            $v['currency_number'] = floatval($v['currency_number']);
         }
 
         return $assetList;

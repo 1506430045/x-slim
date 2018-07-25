@@ -16,6 +16,7 @@ use App\model\task\mysql\TaskModel as MysqlTaskModel;
 use App\model\user\redis\UserModel as RedisUserModel;
 use App\model\user\UserModel;
 use Util\CacheUtil;
+use Util\LoggerUtil;
 
 class TaskModel
 {
@@ -129,13 +130,13 @@ class TaskModel
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
         if ($id) {
             $times = (new RedisUserModel)->setUserPerWeekSignTimes($userId); //记录用户当前周签到次数
-            if ($times === 7) {
+            if ($times === 7) { //日签到生成任务及奖励
                 $this->createSignIn7Task($userId);
             }
             $currency = [
                 'currency_id' => $taskConf['currency_id'],
-                'currency_name' => $taskConf['currency_id'],
-                'currency_number' => $taskConf['currency_id']
+                'currency_name' => $taskConf['currency_name'],
+                'currency_number' => $taskConf['currency_number']
             ];
             (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
         }
@@ -155,8 +156,8 @@ class TaskModel
         if ($id) {
             $currency = [
                 'currency_id' => $taskConf['currency_id'],
-                'currency_name' => $taskConf['currency_id'],
-                'currency_number' => $taskConf['currency_id']
+                'currency_name' => $taskConf['currency_name'],
+                'currency_number' => $taskConf['currency_number']
             ];
             (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency);
         }
