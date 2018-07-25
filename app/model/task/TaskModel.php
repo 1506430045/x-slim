@@ -17,7 +17,6 @@ use App\model\task\mysql\TaskConfModel as MysqlTaskConfModel;
 use App\model\user\redis\UserModel as RedisUserModel;
 use App\model\user\UserModel;
 use Util\CacheUtil;
-use Util\LoggerUtil;
 
 class TaskModel
 {

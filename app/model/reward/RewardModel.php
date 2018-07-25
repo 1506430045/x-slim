@@ -61,49 +61,16 @@ class RewardModel extends BaseModel
             $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
                 ->where('user_id', '=', $userId)
                 ->order('id desc')
-                ->getList(['id', 'reward_type', 'foreign_id', 'currency_name', 'currency_number', 'created_at']);
+                ->getList(['currency_name', 'currency_number', 'reward_description', 'created_at']);
             if (empty($list)) {
                 return [];
             }
-            $rewardTypeMap = $this->formatRewardType($list);
             foreach ($list as &$v) {
-                $id = $v['id'];
-                $v['reward_type'] = $rewardTypeMap[$id] ?? '任务奖励';
-                unset($v['id']);
+                $v['currency_number'] = floatval($v['currency_number']);
             }
             return $list;
         } catch (\Exception $e) {
             return [];
         }
-    }
-
-    /**
-     * 格式化奖励类型
-     *
-     * @param array $rewardList
-     * @return array
-     */
-    private function formatRewardType(array $rewardList = [])
-    {
-        if (empty($rewardList)) {
-            return [];
-        }
-        $result = [];
-        foreach ($rewardList as $v) {
-            $id = $v['id'];
-            $rewardType = $v['reward_type'];
-            $rewardTypeStr = '任务奖励';
-            if ($rewardType === self::REWARD_TYPE_2) {
-                $rewardTypeStr = '日常领取';
-            }
-            if ($rewardType === self::REWARD_TYPE_3) {
-                $rewardTypeStr = '邀请XX';
-            }
-            if ($rewardType === self::REWARD_TYPE_1) {
-                $rewardTypeStr = '任务';
-            }
-            $result[$id] = $rewardTypeStr;
-        }
-        return $result;
     }
 }

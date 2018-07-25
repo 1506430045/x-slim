@@ -42,14 +42,15 @@ class MiningModel extends BaseModel
             //条件 1、未领取 2、未过期
             $list = $pdo->where('user_id', '=', $userId)
                 ->where('mining_status', '=', self::MINING_STATUS_1)
-//                ->where('effective_time', '<=', $now)
+                ->where('effective_time', '<=', $now)
                 ->where('dead_time', '>', $now)
-                ->getList(['id', 'currency_name', 'currency_number', 'effective_time']);
+                ->getList(['id', 'currency_name', 'currency_number', 'effective_time', 'dead_time']);
             if (empty($list)) {
                 return [];
             }
             foreach ($list as &$v) {
-                $v['effective_time'] = date('Y-m-d H:i:s');
+                $v['effective_time'] = date('Y-m-d H:i:s', $v['effective_time']);
+                $v['dead_time'] = date('Y-m-d H:i:s', $v['dead_time']);
             }
             return $list;
         } catch (\Exception $e) {
