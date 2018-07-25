@@ -24,6 +24,8 @@ class UserModel
 
     /**
      * 设置每个用户当前周的登录次数
+     * 当周7日全签到 则值为 1111111
+     * 当周7日全没签到 则值为 0000000
      *
      * @param int $userId
      * @return int
@@ -31,25 +33,34 @@ class UserModel
     public function setUserPerWeekSignTimes(int $userId)
     {
         $key = sprintf(self::USER_PER_WEEK_SIGN_HASH, date('Y-W'));
+        $w = date('w'); //当前日期为当前周的第几天 周日为0
+        if ($w == '0') {      //若是周日 则改为7
+            $w = '7';
+        }
+        $times = $this->getUserPerWeekSignTimes($userId);
+        $times = substr_replace($times, '1', $w - 1, 1);
+
         $redis = RedisModel::getInstance(RedisConfig::$baseConfig)->redis;
         if ($redis->ttl($key) === -1) { //未设置过期
             $redis->expire($key, 86400 * 7);
         }
-        return $redis->hIncrBy($key, $userId, 1);
+        return $redis->set($key, $userId, $times);
     }
 
     /**
      * 获取用户当前周签到次数
      *
      * @param int $userId
-     * @return int
+     * @return string
      */
     public function getUserPerWeekSignTimes(int $userId)
     {
         $key = sprintf(self::USER_PER_WEEK_SIGN_HASH, date('Y-W'));
         $times = RedisModel::getInstance(RedisConfig::$baseConfig)->redis->hGet($key, $userId);
-        $times = intval($times);
-        return $times > 7 ? 7 : $times;
+        if (strlen($times) !== 7) {
+            return '0000000';
+        }
+        return $times;
     }
 
     /**

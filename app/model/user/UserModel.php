@@ -17,7 +17,6 @@ use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
 use Util\AesUtil;
-use Util\LoggerUtil;
 
 class UserModel extends BaseModel
 {
