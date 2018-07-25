@@ -44,7 +44,7 @@ class UserModel
         if ($redis->ttl($key) === -1) { //未设置过期
             $redis->expire($key, 86400 * 7);
         }
-        return $redis->set($key, $userId, $times);
+        return $redis->hSet($key, $userId, $times);
     }
 
     /**
