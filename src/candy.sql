@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-07-25 16:38:58
+-- Generation Time: 2018-07-25 16:45:08
 -- 服务器版本： 5.7.22
 -- PHP Version: 7.1.14
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `candy`
 --
+CREATE DATABASE IF NOT EXISTS `candy` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `candy`;
 
 -- --------------------------------------------------------
 
