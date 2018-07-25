@@ -45,7 +45,8 @@ class TaskModel
             return [];
         }
         $normalList = $advancedList = [];
-        foreach ($taskList as $v) {
+        foreach ($taskList as &$v) {
+            $v['currency_number'] = floatval($v['currency_number']);
             if ($v['task_type'] === mysql\TaskModel::TASK_TYPE_1) {
                 $normalList[] = $v;
             }

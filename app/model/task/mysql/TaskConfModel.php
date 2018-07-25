@@ -41,7 +41,7 @@ class TaskConfModel
             if ($taskType !== 0) {
                 $task->where('task_type', '=', $taskType);
             }
-            return $task->getList(['id', 'task_name', 'task_description', 'task_type']);
+            return $task->getList(['id', 'task_name', 'task_description', 'task_type', 'currency_name', 'currency_number']);
         } catch (\Exception $e) {
             return [];
         }
