@@ -80,8 +80,9 @@ class TaskModel
                 $v['task_status'] = self::TASK_STATUS_1;
             }
             if (self::TASK_CONF_ID_2 === $v['id']) {       //七日登录
-                $v['task_status'] = self::TASK_STATUS_0;
-                $v['ext']['sign_times'] = (new RedisUserModel)->getUserPerWeekSignTimes($userId);
+                $signTimes = (new RedisUserModel)->getUserPerWeekSignTimes($userId);
+                $v['task_status'] = $signTimes === '1111111' ? self::TASK_STATUS_1 : self::TASK_STATUS_0;
+                $v['ext']['sign_times'] = $signTimes;
             }
             if (self::TASK_CONF_ID_3 === $v['id']) {       //绑定手机
                 $user = (new UserModel())->getUserByOpenId($openId);
