@@ -52,7 +52,6 @@ class UserModel extends BaseModel
             'phone' => '',
             'invite_code' => ''
         ];
-        $inviter = 1;
         try {
             $userId = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->insert($data);
             if ($userId > 0) {
@@ -82,6 +81,9 @@ class UserModel extends BaseModel
      */
     public function checkInviteCode($inviteCode = '')
     {
+        if (empty($inviteCode)) {
+            return 0;
+        }
         $inviteUserId = UserInviteModel::decodeInviteCode($inviteCode);
         $checkCode = (new redis\UserModel)->getUserInviteCode($inviteUserId);
         return $inviteCode === $checkCode ? $inviteUserId : 0;
