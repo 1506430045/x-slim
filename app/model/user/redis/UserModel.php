@@ -18,8 +18,39 @@ class UserModel
     const OPEN_USER_INFO_HASH = 'openid:user_info:hash';            //openid -> user_info hash
     const USER_INVITE_CODE_HASH = 'user_id:%s:invite_code:hash';    //用户邀请码
     const USER_PHONE_SMS_CODE = 'user:%s:phone:%s:sms_code';        //用户短信
-    const USER_SIGN_IN_FLAG = 'user:%s:sign_in:flag';   //用户签到标记
-    const USER_INVITEE_BITMAP = 'user:invitee:bitmap';  //所有被邀请的人
+    const USER_SIGN_IN_FLAG = 'user:%s:sign_in:flag';               //用户签到标记
+    const USER_INVITEE_BITMAP = 'user:invitee:bitmap';              //所有被邀请的人
+    const USER_PER_WEEK_SIGN_HASH = 'year_week:%s:hash';            //用户签到第几周 year年份 week当年第几周 key为user_id val为当周签到次数
+
+    /**
+     * 设置每个用户当前周的登录次数
+     *
+     * @param int $userId
+     * @return int
+     */
+    public function setUserPerWeekSignTimes(int $userId)
+    {
+        $key = sprintf(self::USER_PER_WEEK_SIGN_HASH, date('Y-W'));
+        $redis = RedisModel::getInstance(RedisConfig::$baseConfig)->redis;
+        if ($redis->ttl($key) === -1) { //未设置过期
+            $redis->expire($key, 86400 * 7);
+        }
+        return $redis->hIncrBy($key, $userId, 1);
+    }
+
+    /**
+     * 获取用户当前周签到次数
+     *
+     * @param int $userId
+     * @return int
+     */
+    public function getUserPerWeekSignTimes(int $userId)
+    {
+        $key = sprintf(self::USER_PER_WEEK_SIGN_HASH, date('Y-W'));
+        $times = RedisModel::getInstance(RedisConfig::$baseConfig)->redis->hGet($key, $userId);
+        $times = intval($times);
+        return $times > 7 ? 7 : $times;
+    }
 
     /**
      * 保存用户邀请码到redis hash
@@ -89,7 +120,6 @@ class UserModel
         $redis = RedisModel::getInstance(RedisConfig::$baseConfig)->redis;
         $re1 = $redis->setnx($key, $smsCode);
         $re2 = false;
-        $ttl = 3600;    //todo
         if ($re1) {
             $re2 = $redis->expire($key, $ttl);
         }
@@ -122,7 +152,7 @@ class UserModel
     }
 
     /**
-     * 设置用户当日签到flag
+     * 设置用户当日签到标记
      *
      * @param int $userId
      * @return int

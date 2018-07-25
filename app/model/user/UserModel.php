@@ -111,7 +111,7 @@ class UserModel extends BaseModel
                 if (!empty($userInfo['inviter'])) {
                     (new InviteModel())->inviteReward($userInfo['inviter'], $userId);
                 }
-                //绑定手机需要给用户奖励 todo
+                //绑定手机需要给用户奖励
                 (new TaskModel())->createBindPhoneTask($userId);
                 //保存手机信息到redis
                 $userInfo['phone'] = $phoneEncrypt;

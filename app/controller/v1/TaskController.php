@@ -11,18 +11,20 @@ namespace App\controller\v1;
 
 
 use App\model\task\TaskModel;
+use App\model\user\UserModel;
 
 class TaskController extends BaseController
 {
     //任务列表
     public function list()
     {
-        list($normalList, $advancedList) = (new TaskModel())->getTaskConfList();
+        $taskModel = new TaskModel();
+        list($normalList, $advancedList) = $taskModel->getTaskConfList();
 
         $data = [
             'normal_number' => count($normalList),
             'advanced_number' => count($advancedList),
-            'normal_list' => $normalList,
+            'normal_list' => $taskModel->getTaskStatus($this->userId, $this->openId, $normalList),
             'advanced_list' => $advancedList
         ];
         $this->renderJson(0, 'success', $data);

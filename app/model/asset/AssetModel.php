@@ -29,19 +29,23 @@ class AssetModel extends BaseModel
      * 创建用户资产数据
      *
      * @param int $userId
-     * @param int $currencyId
-     * @return int
+     * @return bool
      */
-    public function createUserAsset(int $userId, int $currencyId = 1)
+    public function createUserAsset(int $userId)
     {
-        $data = [
-            'user_id' => $userId,
-            'currency_id' => $currencyId
-        ];
+        $currencyList = (new CurrencyModel())->getCurrencyList();
+        if (empty($currencyList)) {
+            return false;
+        }
+        $sql = [];
+        foreach ($currencyList as $currency) {
+            $sql[] = "INSERT INTO `{$this->table}` (user_id, currency_id, currency_name) VALUES ({$userId}, {$currency['id']}, '{$currency['currency_name']}')";
+        }
         try {
-            return PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->insert($data);
+            return PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->executeTransaction($sql);
         } catch (\Exception $e) {
-            return 0;
+            LoggerUtil::getInstance()->warning(sprintf("生成用户资金账户异常，user_id = %d, exception = %s", $userId, $e->getMessage()));
+            return false;
         }
     }
 
