@@ -12,8 +12,10 @@ namespace App\model\asset;
 
 use App\model\BaseModel;
 use App\model\currency\CurrencyModel;
+use App\model\exchange\ExchangeModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use Util\CacheUtil;
 use Util\LoggerUtil;
 
 class AssetModel extends BaseModel
@@ -65,6 +67,41 @@ class AssetModel extends BaseModel
         } catch (\Exception $e) {
             return 0;
         }
+    }
+
+    /**
+     * 获取用户总资产
+     *
+     * @param int $userId
+     * @param string $currencyName
+     * @return array
+     */
+    public function getUserTotalAsset(int $userId, string $currencyName = 'TB')
+    {
+        $cacheKey = sprintf("get:user:total:asset:%d:%s", $userId, $currencyName);
+        if ($data = CacheUtil::getCache($cacheKey)) {
+            return $data;
+        }
+        $assetList = $this->getAssetByUserId($userId);
+        if (empty($assetList)) {
+            return [
+                'currency_name' => 'TB',
+                'currency_number' => 0
+            ];
+        }
+        $pairList = (new ExchangeModel())->getPairList();
+        $asset = 0;
+        foreach ($assetList as $v) {
+            $pair = strtolower(sprintf("%s-%s", $v['currency_name'], $currencyName));
+            $exchangeRate = $pairList[$pair]['exchange_rate'] ?? 0;
+            $asset += $v['currency_number'] * $exchangeRate;
+        }
+        $data = [
+            'currency_name' => $currencyName,
+            'currency_number' => $asset
+        ];
+        CacheUtil::setCache($cacheKey, $data, 3);
+        return $data;
     }
 
     /**

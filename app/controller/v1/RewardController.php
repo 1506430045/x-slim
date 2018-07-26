@@ -21,10 +21,10 @@ class RewardController extends BaseController
     {
         $waitList = (new MiningModel())->getMiningList($this->userId);
         $rewardList = (new RewardModel())->getRewardList($this->userId);
-        $tbAsset = (new AssetModel())->getAssetByUserId($this->userId, 1);
+        $tbAsset = (new AssetModel())->getUserTotalAsset($this->userId, 'TB');
         $data = [
-            'currency_name' => $tbAsset['0']['currency_name'] ?? '',
-            'currency_number' => !empty($tbAsset['0']['currency_number']) ? floatval($tbAsset['0']['currency_number']) : 0.0,
+            'currency_name' => $tbAsset['currency_name'] ?? 'TB',
+            'currency_number' => !empty($tbAsset['currency_number']) ? floatval($tbAsset['currency_number']) : 0.0,
             'reward_list' => $rewardList,
             'wait_list' => $waitList
         ];

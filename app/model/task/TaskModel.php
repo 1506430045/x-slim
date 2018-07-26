@@ -29,6 +29,10 @@ class TaskModel
     const TASK_STATUS_1 = 1;    //已完成
     const TASK_STATUS_2 = 2;    //持续完成
 
+    const SIGN_IN_STATUS_0 = 0; //签到失败
+    const SIGN_IN_STATUS_1 = 1; //签到成功
+    const SIGN_IN_STATUS_2 = 2; //重复签到
+
     /**
      * 获取任务列表
      *
@@ -126,7 +130,7 @@ class TaskModel
     {
         $flag = (new RedisUserModel())->setUserSignFlag($userId);
         if ($flag !== 1) {  //已签到或异常
-            return 0;
+            return -1;
         }
         $taskConf = $this->getTaskConfById(TaskConfModel::TASK_CONF_ID_1);
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
