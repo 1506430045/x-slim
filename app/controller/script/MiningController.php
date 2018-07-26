@@ -16,29 +16,43 @@ use Config\db\MysqlConfig;
 
 class MiningController
 {
-    const USER_MINING_NUM_PER_DAY = 10;     //每个用户每天TB挖矿总量
     const TASK_USER_NUM_PER_TIME = 200;     //每次处理用户数
-    const TASK_SLEEP_TIME = 50000;
+    const TASK_SLEEP_TIME = 50000;          //微妙
+    const MINING_NUM_PER_TIME = 6;          //每个时间每用户挖矿数量
+    const CURRENCY_NUM_PER_TIME = 2;        //每个时间每用户挖矿总额
 
-    //挖矿奖励记录生成时间 24小时不领取将失效
+    //挖矿奖励记录生成时间 次日凌晨3点前不领取将失效
     const MINING_CREATE_TIME = [
-        '01:00:00',
         '05:00:00',
-        '09:00:00',
-        '13:00:00',
-        '17:00:00',
-        '21:00:00',
+        '11:00:00',
+        '18:00:00',
     ];
+
+    /**
+     * 随机分配
+     *
+     * @param float $total
+     * @param int $num
+     * @param float $min
+     * @return array
+     */
+    private function randomNum(float $total, int $num, float $min = 0.01)
+    {
+        $result = [];
+        for ($i = 1; $i < $num; $i++) {
+            $safeTotal = ($total - ($num - $i) * $min) / ($num - $i);//随机安全上限
+            $money = mt_rand($min * 100, $safeTotal * 100) / 100;
+            $total = $total - $money;
+            $result[] = $money;
+        }
+        $result[] = $total;
+        return $result;
+    }
 
     //任务
     public function task()
     {
         $maxId = 0;
-        $currency = [
-            'currency_id' => 1,
-            'currency_name' => 'TB',
-            'currency_number' => round(self::USER_MINING_NUM_PER_DAY / count(self::MINING_CREATE_TIME), 18)
-        ];
         while (true) {
             $userList = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->where('id', ">", $maxId)->limit(self::TASK_USER_NUM_PER_TIME)->getList(['id']);
             if (empty($userList)) {
@@ -47,7 +61,7 @@ class MiningController
             $count = count($userList);
             $maxId = $userList[$count - 1]['id'];
             $userIds = array_column($userList, 'id');
-            $this->createMiningRecord($userIds, $currency);
+            $this->createMiningRecord($userIds);
             usleep(self::TASK_SLEEP_TIME);
         }
     }
@@ -56,19 +70,31 @@ class MiningController
      * 创建用户每日挖矿数据
      *
      * @param array $userIds
-     * @param array $currency
      * @return int
      */
-    public function createMiningRecord($userIds = [], $currency = [])
+    public function createMiningRecord($userIds = [])
     {
         $sql = "INSERT INTO `candy_mining` (user_id, mining_status, currency_id, currency_name, currency_number, effective_time, dead_time) VALUES";
+
+        //时间
         $date = date('Y-m-d');
+        $nextDate = date('Y-m-d', time() + 86400);  //次日日期
+        $deadTime = strtotime("{$nextDate} 03:00:00");         //次日凌晨3点失效 未领取失效时间戳
+
+        //状态
         $miningStatus = MiningModel::MINING_STATUS_1;   //待领取
+
+        //奖励
+        $currencyId = 1;
+        $currencyName = 'TB';
+
         foreach ($userIds as $userId) {
             foreach (self::MINING_CREATE_TIME as $time) {
                 $effectiveTime = strtotime($date . ' ' . $time);
-                $deadTime = strtotime($date . ' ' . $time) + 86400; //生效起24小时没领取则失效
-                $sql .= " ({$userId}, {$miningStatus}, {$currency['currency_id']}, '{$currency['currency_name']}', {$currency['currency_number']}, {$effectiveTime}, {$deadTime}),";
+                $randomNum = $this->randomNum(self::CURRENCY_NUM_PER_TIME, self::MINING_NUM_PER_TIME);
+                foreach ($randomNum as $currencyNumber) {
+                    $sql .= " ({$userId}, {$miningStatus}, {$currencyId}, '{$currencyName}', {$currencyNumber}, {$effectiveTime}, {$deadTime}),";
+                }
             }
         }
         $sql = rtrim($sql, ',');

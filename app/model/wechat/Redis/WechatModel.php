@@ -14,20 +14,35 @@ use Config\db\RedisConfig;
 
 class WechatModel
 {
-    const TOKEN_KEY = "token:%s";
+    const TOKEN_KEY = "token:%s";                     //token
+    const OPEN_TOKEN = "open_id:%s:token";            //openId token
 
     /**
      * 设置3rdsession
      *
-     * @param $token
+     * @param string $openId
+     * @param string $token
      * @param $val
      * @param int $ttl
      * @return bool
      */
-    public function set3rdSession($token, $val, $ttl = 3600)
+    public function set3rdSession(string $openId, string $token, $val, $ttl = 86400)
     {
-        $key = sprintf(self::TOKEN_KEY, $token);
-        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->set($key, $val, $ttl);
+        $redis = RedisModel::getInstance(RedisConfig::$baseConfig)->redis;
+        $oldToken = $redis->get(sprintf(self::OPEN_TOKEN, $openId));
+        $redis = $redis->multi();
+        if (!empty($oldToken)) {   //需要从redis删除原token
+            $redis->set(sprintf(self::TOKEN_KEY, $token), $val, $ttl);
+            $redis->set(sprintf(self::OPEN_TOKEN, $openId), $token, $ttl);
+            $redis->del(sprintf(self::TOKEN_KEY, $oldToken));
+            $re = $redis->exec();
+            return $re['0'];
+        } else {
+            $redis->set(sprintf(self::TOKEN_KEY, $token), $val, $ttl);
+            $redis->set(sprintf(self::OPEN_TOKEN, $openId), $token, $ttl);
+            $re = $redis->exec();
+            return $re['0'];
+        }
     }
 
     /**

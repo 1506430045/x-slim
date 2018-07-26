@@ -21,6 +21,7 @@ class WechatModel extends BaseModel
     //线上
     const APP_ID = 'wxfb2b7642d9c173d7';
     const APP_SECRET = 'c23e66dac468af88e0a0c04262a1c6ed';
+
     const GRANT_TYPE = 'authorization_code';
     const BASE_URL = 'https://api.weixin.qq.com';
 
@@ -93,7 +94,7 @@ class WechatModel extends BaseModel
     public static function set3rdSession($openid, $sessionKey)
     {
         $token = self::get3rdSessionKey(64);
-        (new Redis\WechatModel())->set3rdSession($token, sprintf("%s %s", $openid, $sessionKey));
+        (new Redis\WechatModel())->set3rdSession($openid, $token, sprintf("%s %s", $openid, $sessionKey));
         return $token;
     }
 
