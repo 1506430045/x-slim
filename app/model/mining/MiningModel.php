@@ -11,6 +11,7 @@ namespace App\model\mining;
 
 
 use App\model\BaseModel;
+use App\model\currency\CurrencyModel;
 use App\model\PdoModel;
 use App\model\reward\RewardModel;
 use Config\db\MysqlConfig;
@@ -44,13 +45,17 @@ class MiningModel extends BaseModel
                 ->where('mining_status', '=', self::MINING_STATUS_1)
                 ->where('effective_time', '<=', $now)
                 ->where('dead_time', '>', $now)
-                ->getList(['id', 'currency_name', 'currency_number', 'effective_time', 'dead_time']);
+                ->getList(['id', 'currency_id', 'currency_name', 'currency_number', 'effective_time', 'dead_time']);
             if (empty($list)) {
                 return [];
             }
+            $currencyList = (new CurrencyModel())->getCurrencyList();
             foreach ($list as &$v) {
                 $v['effective_time'] = date('Y-m-d H:i:s', $v['effective_time']);
                 $v['dead_time'] = date('Y-m-d H:i:s', $v['dead_time']);
+                $currencyId = $v['currency_id'];
+                $v['currency_icon'] = $currencyList[$currencyId]['currency_icon'] ?? '';
+                unset($v['currency_id']);
             }
             return $list;
         } catch (\Exception $e) {

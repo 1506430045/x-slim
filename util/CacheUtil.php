@@ -28,7 +28,7 @@ class CacheUtil
         if (empty($key)) {
             return false;
         }
-        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->set($key, json_encode($data), $timeout);
+        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->set($key, json_encode($data, JSON_UNESCAPED_UNICODE), $timeout);
     }
 
     /**
