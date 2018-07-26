@@ -13,6 +13,7 @@ namespace App\model\company;
 use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use Util\CacheUtil;
 
 class CompanyModel extends BaseModel
 {
@@ -26,12 +27,19 @@ class CompanyModel extends BaseModel
     /**
      * 关于我们
      *
+     * @param int $id
      * @return array
      */
-    public function aboutUs()
+    public function aboutUs($id = 1)
     {
+        $cacheKey = 'about:us:' . $id;
+        if ($data = CacheUtil::getCache($cacheKey)) {
+            return $data;
+        }
         try {
-            return PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->getRow();
+            $data = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('id', '=', $id)->getRow();
+            CacheUtil::setCache($cacheKey, $data, 3600);
+            return $data;
         } catch (\Exception $e) {
             return [];
         }
