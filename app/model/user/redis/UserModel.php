@@ -16,10 +16,9 @@ use Util\LoggerUtil;
 class UserModel
 {
     const OPEN_USER_INFO_HASH = 'openid:user_info:hash';            //openid -> user_info hash
-    const USER_INVITE_CODE_HASH = 'user_id:%s:invite_code:hash';    //用户邀请码
+    const USER_INVITE_CODE_HASH = 'user_id:invite_code:hash';       //用户邀请码
     const USER_PHONE_SMS_CODE = 'user:%s:phone:%s:sms_code';        //用户短信
     const USER_SIGN_IN_FLAG = 'user:%s:sign_in:flag';               //用户签到标记
-    const USER_INVITEE_BITMAP = 'user:invitee:bitmap';              //所有被邀请的人
     const USER_PER_WEEK_SIGN_HASH = 'year_week:%s:hash';            //用户签到第几周 year年份 week当年第几周 key为user_id val为当周签到次数
 
     /**
@@ -189,27 +188,5 @@ class UserModel
             return 1;
         }
         return 0;   //设置失败或设置异常
-    }
-
-    /**
-     * 是否已该被邀请者生成邀请任务
-     *
-     * @param int $invitee 被邀请者
-     * @return int
-     */
-    public function getInvitee(int $invitee)
-    {
-        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->getBit(self::USER_INVITEE_BITMAP, $invitee);
-    }
-
-    /**
-     * 记录该被邀请者已生成邀请任务
-     *
-     * @param int $invitee
-     * @return int
-     */
-    public function setInviteeToMap(int $invitee)
-    {
-        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->setBit(self::USER_INVITEE_BITMAP, $invitee, 1);
     }
 }
