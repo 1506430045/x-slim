@@ -78,16 +78,28 @@ class AssetModel extends BaseModel
      */
     public function getUserTotalAsset(int $userId, string $currencyName = 'TB')
     {
-        $cacheKey = sprintf("get:user:total:asset:%d:%s", $userId, $currencyName);
-        if ($data = CacheUtil::getCache($cacheKey)) {
-            return $data;
-        }
-        $assetList = $this->getAssetByUserId($userId);
-        if (empty($assetList)) {
+        return $this->calculateUserTotalAsset($userId, $currencyName, $this->getAssetByUserId($userId));
+    }
+
+    /**
+     * 计算用户总资产
+     *
+     * @param int $userId
+     * @param string $currencyName
+     * @param array $assetList
+     * @return array
+     */
+    public function calculateUserTotalAsset(int $userId, string $currencyName = 'TB', array $assetList = [])
+    {
+        if (empty($userId) || empty($currencyName) || empty($assetList)) {
             return [
                 'currency_name' => 'TB',
                 'currency_number' => 0
             ];
+        }
+        $cacheKey = sprintf("get:user:total:asset:%d:%s", $userId, $currencyName);
+        if ($data = CacheUtil::getCache($cacheKey)) {
+            return $data;
         }
         $pairList = (new ExchangeModel())->getPairList();
         $asset = 0;
@@ -100,19 +112,23 @@ class AssetModel extends BaseModel
             'currency_name' => $currencyName,
             'currency_number' => $asset
         ];
-        CacheUtil::setCache($cacheKey, $data, 3);
+        CacheUtil::setCache($cacheKey, $data, 5);
         return $data;
     }
 
     /**
-     * 获取用户资产列表
+     * 获取用户资产列表 不包含总资产
      *
      * @param int $userId
-     * @param int $currencyId
+     * @param int $currencyId 为0表示获取所有资产列表
      * @return array
      */
     public function getAssetByUserId(int $userId, $currencyId = 0)
     {
+        $cacheKey = sprintf("get:asset:by:user_id:%d:%d", $userId, $currencyId);
+        if ($data = CacheUtil::getCache($cacheKey)) {
+            return $data;
+        }
         $currencyList = (new CurrencyModel())->getCurrencyList();   //货币配置
 
         $fields = ['id', 'currency_id', 'currency_number'];
@@ -138,6 +154,7 @@ class AssetModel extends BaseModel
             $v['currency_number'] = floatval($v['currency_number']);
         }
 
+        CacheUtil::setCache($cacheKey, $data, 5);
         return $assetList;
     }
 }

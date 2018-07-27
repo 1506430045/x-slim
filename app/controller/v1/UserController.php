@@ -80,8 +80,16 @@ class UserController extends BaseController
     //我的资产
     public function asset()
     {
-
-        $data = (new AssetModel())->getAssetByUserId($this->userId);
+        $assetModel = new AssetModel();
+        $assetList = $assetModel->getAssetByUserId($this->userId);
+        $tbAsset = $assetModel->calculateUserTotalAsset($this->userId, 'TB', $assetList);
+        $data = [
+            'tb_total' => [
+                'currency_name' => $tbAsset['currency_name'] ?? '',
+                'currency_number' => $tbAsset['currency_number'] ?? 0,
+            ],
+            'asset_list' => $assetList
+        ];
 
         $this->renderJson(0, 'success', $data);
     }
