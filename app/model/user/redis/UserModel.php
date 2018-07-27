@@ -23,30 +23,6 @@ class UserModel
     const BIND_PHONE_BITMAP = 'bind_phone_bitmap';                  //已绑定手机号
 
     /**
-     * 设置已绑定手机号到redis
-     *
-     * @param string $phone
-     * @return int
-     */
-    public function setBindPhoneBitMap(string $phone)
-    {
-        $phone = intval($phone);
-        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->setBit(self::BIND_PHONE_BITMAP, $phone, 1);
-    }
-
-    /**
-     * 是否已绑定手机号
-     *
-     * @param string $phone
-     * @return int
-     */
-    public function getBindPhoneBitMap(string $phone)
-    {
-        $phone = intval($phone);
-        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->getBit(self::BIND_PHONE_BITMAP, $phone);
-    }
-
-    /**
      * 设置每个用户当前周的登录次数
      * 当周7日全签到 则值为 1111111
      * 当周7日全没签到 则值为 0000000

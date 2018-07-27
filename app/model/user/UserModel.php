@@ -116,9 +116,10 @@ class UserModel extends BaseModel
                 }
                 //绑定手机需要给用户奖励
                 (new TaskModel())->createBindPhoneTask($userId);
+                $redisUserModel = new redis\UserModel();
                 //保存手机信息到redis
                 $userInfo['phone'] = $phoneEncrypt;
-                (new redis\UserModel)->setOpenUserInfo($openId, $userInfo);
+                $redisUserModel->setOpenUserInfo($openId, $userInfo);
             }
             return $rowCount;
         } catch (\Exception $e) {

@@ -109,6 +109,7 @@ class UserController extends BaseController
         }
 
         $userModel = new UserModel();
+
         $checkStatus = $userModel->checkUserSmsCode($this->userId, $phone, $verifyCode);
         if ($checkStatus === UserModel::CHECK_SMS_CODE_EXPIRED) {
             $this->renderJson(400, '验证码已过期，请重新获取');
@@ -122,7 +123,7 @@ class UserController extends BaseController
             $message = '绑定成功';
             $stats = 1;
         } else {
-            $message = '该手机号已绑定其他用户, 请更换手机号再试';
+            $message = '该号码已被绑定，请换号码重试';
             $stats = 2;
         }
         $this->renderJson(0, $message, ['status' => $stats]);

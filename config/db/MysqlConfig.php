@@ -12,11 +12,14 @@ namespace Config\db;
 
 class MysqlConfig
 {
+    //线上 thinkbit thinkbit
+    //测试 root   ws_Tb_sas31121F
+    //本机 root   123456
     public static $baseConfig = [
         'host' => '127.0.0.1',
         'dbname' => 'candy',
-        'username' => 'root',
-        'password' => 'ws_Tb_sas31121F',   //123456 ws_Tb_sas31121F
+        'username' => 'thinkbit',
+        'password' => 'thinkbit',
         'charset' => 'utf8',
         'options' => [
             \PDO::ATTR_STRINGIFY_FETCHES => false,

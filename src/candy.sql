@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-07-25 16:45:08
+-- Generation Time: 2018-07-28 02:29:35
 -- 服务器版本： 5.7.22
 -- PHP Version: 7.1.14
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `candy`
 --
-CREATE DATABASE IF NOT EXISTS `candy` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `candy`;
 
 -- --------------------------------------------------------
 
@@ -48,7 +46,7 @@ CREATE TABLE `candy_asset` (
 
 CREATE TABLE `candy_company` (
   `id` int(11) NOT NULL COMMENT '主键ID',
-  `official_website` varchar(24) NOT NULL DEFAULT '' COMMENT '官方网站',
+  `official_website` varchar(32) NOT NULL DEFAULT '' COMMENT '官方网站',
   `wechat` varchar(24) NOT NULL DEFAULT '' COMMENT '微信',
   `wechat_public` varchar(128) NOT NULL DEFAULT '' COMMENT '微信公众号二维码图片',
   `telegram_cn` varchar(24) NOT NULL DEFAULT '' COMMENT 'Telegram中文',
@@ -65,7 +63,7 @@ CREATE TABLE `candy_company` (
 --
 
 INSERT INTO `candy_company` (`id`, `official_website`, `wechat`, `wechat_public`, `telegram_cn`, `telegram_en`, `twitter`, `weibo`, `about_us`, `created_at`, `updated_at`) VALUES
-(1, 'https://thinkbitpro.com/', 'ThinkBitPro_2018', '', 'ThinkBitProCN', 'ThinkBitProEnglish', 'ThinkBitPro', 'thinkbitexchange', '信币是下一代的数字资产交易所，为用户提供高流动性交易环境、全资产冷储存、多种订单类型、高性能', '2018-07-25 06:53:23', '2018-07-25 06:53:23');
+(1, 'https://www.thinkbitpro.com', 'ThinkBitPro资讯', 'https://static.m960.cn/%E4%BA%8C%E7%BB%B4%E7%A0%81%402x.png', 'ThinkBit Pro(中文群)', 'ThinkBit Pro（English）', 'ThinkBitPro', 'ThinkBitPro资讯', 'ThinkBit作为下一代交易所，将为用户提供高流动性的交易环境、全资产冷储存、多种订单类型、高性能 API 。ThinkBit使用自研的“粒子对撞”交易撮合引擎，处理订单速度达500万订单/秒/交易。ThinkBit 还采用 “绝对零度” 100%冷钱包技术，保护用户资产的安全。\r\n\r\nThinkBit WaterDrop 是一个源自全球的订单簿平台，同时也是主经纪商。这将会为其他交易所提供高流动性，帮助小型交易所拥有健康流动性及更好的交易环境。交易所云服务让区域性分站做到快速自建交易所，在保障高品质产品体验的前提下，有极大的空间做好用户服务。ThinkBit WaterDrop 全球订单簿基于ThinkBit撮合引擎、智能订单路由、绝对零度冷储存系统，打造出一个全球联合订单簿，为交易者及机构提供高流动性及极佳深度的交易体验。', '2018-07-25 06:53:23', '2018-07-26 09:21:49');
 
 -- --------------------------------------------------------
 
@@ -87,9 +85,34 @@ CREATE TABLE `candy_currency` (
 --
 
 INSERT INTO `candy_currency` (`id`, `currency_name`, `currency_icon`, `currency_description`, `created_at`, `updated_at`) VALUES
-(1, 'TB', 'https://static.feixiaohao.com/coin/eced1e28da4f16e117f471b08ad6e_mid.png', 'TB是基于ERC-20协议发行的币，是ThinkBit信币交易所发行的平台币，极具独创性，总量210亿，永不增发。TB可以用作 ThinkBit服务的费用支付，包括支付费用、保证金费用支付，以及其他费用。\r\n官方网站：https://thinkbit.com', '2018-07-19 12:02:07', '2018-07-24 12:30:25'),
-(2, 'ADE', 'https://static.feixiaohao.com/coin/eced1e28da4f16e117f471b08ad6e_mid.png', 'ADE是建立在DMChain上的币，DMChain建立在Cardano（ADA）之上，利用智能合约和数据透明度，为广告业者提供了一种解决方案，无论广告主的规模如何，均可确保交易的安全性、可验证性、可追溯性和易用性。此外，它还消除了广告行业的不信任性和不确定性，并为广告主提供了更明确的市场目标，以及可跟踪和可量化的广告投放结果。\r\n官方网站：https://dmchain.io\r\n', '2018-07-19 12:02:07', '2018-07-24 12:31:24'),
-(3, 'CCC', 'https://static.feixiaohao.com/coin/eced1e28da4f16e117f471b08ad6e_mid.png', '控银天下（Coindom）是一款区块链投资者的投顾工具，提供深度行情指标，多交易所账户管理、一键搬砖以及资讯、社区等区块链投资相关服务，通过统一极致的操作体验，让小白投资者能够快速上手区块链资产的投资与管理。\r\n官方网站：https://www.coindom.com', '2018-07-19 12:02:07', '2018-07-24 12:30:25');
+(1, 'TB', 'https://static.m960.cn/TB%402x.png', 'TB是基于ERC-20协议发行的币，是ThinkBit信币交易所发行的平台币，极具独创性，总量210亿，永不增发。TB可以用作 ThinkBit服务的费用支付，包括支付费用、保证金费用支付，以及其他费用。\r\n官方网站：https://thinkbit.com', '2018-07-19 12:02:07', '2018-07-26 09:19:14'),
+(2, 'ADE', 'https://static.m960.cn/ADE%402x.png', 'ADE是建立在DMChain上的币，DMChain建立在Cardano（ADA）之上，利用智能合约和数据透明度，为广告业者提供了一种解决方案，无论广告主的规模如何，均可确保交易的安全性、可验证性、可追溯性和易用性。此外，它还消除了广告行业的不信任性和不确定性，并为广告主提供了更明确的市场目标，以及可跟踪和可量化的广告投放结果。\r\n官方网站：https://dmchain.io\r\n', '2018-07-19 12:02:07', '2018-07-26 09:18:46'),
+(3, 'CCC', 'https://static.m960.cn/CCC%402x.png', '控银天下（Coindom）是一款区块链投资者的投顾工具，提供深度行情指标，多交易所账户管理、一键搬砖以及资讯、社区等区块链投资相关服务，通过统一极致的操作体验，让小白投资者能够快速上手区块链资产的投资与管理。\r\n官方网站：https://www.coindom.com', '2018-07-19 12:02:07', '2018-07-26 09:19:00');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `candy_exchange`
+--
+
+CREATE TABLE `candy_exchange` (
+  `id` int(11) NOT NULL COMMENT '主键ID',
+  `pair` varchar(24) NOT NULL DEFAULT '' COMMENT '交易对',
+  `currency_id` int(11) DEFAULT '0' COMMENT '货币ID',
+  `to_currency_id` int(11) NOT NULL DEFAULT '0' COMMENT '兑换货币ID',
+  `exchange_rate` decimal(36,18) NOT NULL DEFAULT '0.000000000000000000' COMMENT '汇率',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `candy_exchange`
+--
+
+INSERT INTO `candy_exchange` (`id`, `pair`, `currency_id`, `to_currency_id`, `exchange_rate`, `created_at`, `updated_at`) VALUES
+(1, 'tb-tb', 1, 1, '1.000000000000000000', '2018-07-26 06:53:29', '2018-07-26 06:53:29'),
+(2, 'ade-tb', 2, 1, '0.001000000000000000', '2018-07-26 06:53:29', '2018-07-26 06:54:06'),
+(3, 'ccc-tb', 3, 1, '0.100000000000000000', '2018-07-26 06:53:29', '2018-07-26 06:54:06');
 
 -- --------------------------------------------------------
 
@@ -240,7 +263,7 @@ CREATE TABLE `candy_user` (
   `avatar_url` varchar(168) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '微信头像',
   `invite_code` varchar(8) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '邀请码',
   `inviter` int(11) NOT NULL DEFAULT '0' COMMENT '邀请人',
-  `phone` varchar(64) NOT NULL DEFAULT '' COMMENT '电话密文',
+  `phone` varchar(64) DEFAULT NULL COMMENT '电话密文',
   `mining_power` int(11) NOT NULL DEFAULT '0' COMMENT '挖矿算力',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
@@ -254,7 +277,8 @@ CREATE TABLE `candy_user` (
 -- Indexes for table `candy_asset`
 --
 ALTER TABLE `candy_asset`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_user_currency` (`user_id`,`currency_id`);
 
 --
 -- Indexes for table `candy_company`
@@ -270,6 +294,12 @@ ALTER TABLE `candy_currency`
   ADD KEY `idx_created_at` (`created_at`);
 
 --
+-- Indexes for table `candy_exchange`
+--
+ALTER TABLE `candy_exchange`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `candy_goods`
 --
 ALTER TABLE `candy_goods`
@@ -279,25 +309,35 @@ ALTER TABLE `candy_goods`
 -- Indexes for table `candy_invite`
 --
 ALTER TABLE `candy_invite`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_invitee` (`invitee`),
+  ADD KEY `idx_inviter` (`inviter`),
+  ADD KEY `idx_created_at` (`created_at`);
 
 --
 -- Indexes for table `candy_mining`
 --
 ALTER TABLE `candy_mining`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_user_created_status` (`user_id`,`created_at`,`mining_status`),
+  ADD KEY `idx_created_at` (`created_at`);
 
 --
 -- Indexes for table `candy_reward`
 --
 ALTER TABLE `candy_reward`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_user_created_at` (`user_id`,`created_at`),
+  ADD KEY `idx_created_at` (`created_at`);
 
 --
 -- Indexes for table `candy_task`
 --
 ALTER TABLE `candy_task`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_conf_date` (`conf_id`,`created_date`),
+  ADD KEY `idx_user_created_at` (`user_id`,`created_at`),
+  ADD KEY `idx_created_at` (`created_at`);
 
 --
 -- Indexes for table `candy_task_conf`
@@ -311,6 +351,7 @@ ALTER TABLE `candy_task_conf`
 ALTER TABLE `candy_user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uniq_openid` (`openid`),
+  ADD UNIQUE KEY `uniq_phone` (`phone`),
   ADD KEY `idx_created_at` (`created_at`);
 
 --
@@ -333,6 +374,12 @@ ALTER TABLE `candy_company`
 -- 使用表AUTO_INCREMENT `candy_currency`
 --
 ALTER TABLE `candy_currency`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID', AUTO_INCREMENT=4;
+
+--
+-- 使用表AUTO_INCREMENT `candy_exchange`
+--
+ALTER TABLE `candy_exchange`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID', AUTO_INCREMENT=4;
 
 --
