@@ -280,7 +280,11 @@ class PdoModel
             $this->resetCondition();
             return $stmt->rowCount();
         } catch (\PDOException $e) {
+            LoggerUtil::getInstance()->notice($e->getMessage(), ['method' => __METHOD__, 'params' => $update]);
             $this->resetCondition();
+            if ($e->getCode() === '23000') {
+                return -1;
+            }
             return 0;
         }
     }
@@ -302,11 +306,11 @@ class PdoModel
             $this->resetCondition();
             return $re ? intval($this->dbh->lastInsertId()) : 0;
         } catch (\PDOException $e) {
+            LoggerUtil::getInstance()->notice($e->getMessage(), ['method' => __METHOD__, 'params' => $arr]);
+            $this->resetCondition();
             if ($e->getCode() === '23000') {
                 return -1;
             }
-            LoggerUtil::getInstance()->notice($e->getMessage(), ['method' => __METHOD__, 'params' => $arr]);
-            $this->resetCondition();
             return 0;
         }
     }

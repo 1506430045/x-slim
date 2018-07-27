@@ -49,7 +49,7 @@ class UserModel extends BaseModel
             'country' => $arr['country'],
             'avatar_url' => $arr['avatarUrl'],
             'inviter' => $inviter,
-            'phone' => '',
+            'phone' => null,
             'invite_code' => ''
         ];
         try {
@@ -106,7 +106,7 @@ class UserModel extends BaseModel
         try {
             //保存手机信息到Mysql
             $pdo = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user');
-            $rowCount = $pdo->where('id', '=', $userId)->where('phone', '=', '')->update($data);
+            $rowCount = $pdo->where('id', '=', $userId)->update($data);
             if ($rowCount > 0) {
                 $userInfo = $this->getUserByOpenId($openId);
                 //是否是被邀请 是的话需要给邀请人奖励
@@ -190,9 +190,8 @@ class UserModel extends BaseModel
      * @param int $ttl
      * @return int
      */
-    public function setUserSmsCode($userId, $phone, $smsCode, $ttl = 300)
+    public function setUserSmsCode($userId, $phone, $smsCode, $ttl = 600)
     {
-        $ttl = 3600;    //todo
         return (new redis\UserModel)->setUserSmsCode($userId, $phone, $smsCode, $ttl);
     }
 

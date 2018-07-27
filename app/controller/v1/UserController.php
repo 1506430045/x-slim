@@ -119,10 +119,13 @@ class UserController extends BaseController
 
         $rowCount = $userModel->bindPhone($this->userId, $this->openId, $phone);
         if ($rowCount === 1) {
-            $this->renderJson(0, 'success');
+            $message = '绑定成功';
+            $stats = 1;
         } else {
-            $this->renderJson(400, '无需重复绑定');
+            $message = '该手机号已绑定其他用户, 请更换手机号再试';
+            $stats = 2;
         }
+        $this->renderJson(0, $message, ['status' => $stats]);
     }
 
     //获取短信验证码
