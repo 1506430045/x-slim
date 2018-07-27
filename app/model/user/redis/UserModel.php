@@ -20,6 +20,31 @@ class UserModel
     const USER_PHONE_SMS_CODE = 'user:%s:phone:%s:sms_code';        //用户短信
     const USER_SIGN_IN_FLAG = 'user:%s:sign_in:flag';               //用户签到标记
     const USER_PER_WEEK_SIGN_HASH = 'year_week:%s:hash';            //用户签到第几周 year年份 week当年第几周 key为user_id val为当周签到次数
+    const BIND_PHONE_BITMAP = 'bind_phone_bitmap';                  //已绑定手机号
+
+    /**
+     * 设置已绑定手机号到redis
+     *
+     * @param string $phone
+     * @return int
+     */
+    public function setBindPhoneBitMap(string $phone)
+    {
+        $phone = intval($phone);
+        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->setBit(self::BIND_PHONE_BITMAP, $phone, 1);
+    }
+
+    /**
+     * 是否已绑定手机号
+     *
+     * @param string $phone
+     * @return int
+     */
+    public function getBindPhoneBitMap(string $phone)
+    {
+        $phone = intval($phone);
+        return RedisModel::getInstance(RedisConfig::$baseConfig)->redis->getBit(self::BIND_PHONE_BITMAP, $phone);
+    }
 
     /**
      * 设置每个用户当前周的登录次数
