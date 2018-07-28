@@ -95,7 +95,7 @@ class TaskModel
                 $v['task_status'] = !empty($user['phone']) ? self::TASK_STATUS_1 : self::TASK_STATUS_0;
             }
             if (self::TASK_CONF_ID_4 === $v['id']) {       //持续完成
-                $v['task_status'] = self::TASK_STATUS_2;
+                $v['task_status'] = self::TASK_STATUS_0;
             }
             if ($v['task_type'] === mysql\TaskModel::TASK_TYPE_2) {
                 $v['task_status'] = self::TASK_STATUS_3;
