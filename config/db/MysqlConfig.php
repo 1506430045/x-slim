@@ -18,8 +18,8 @@ class MysqlConfig
     public static $baseConfig = [
         'host' => '127.0.0.1',
         'dbname' => 'candy',
-        'username' => 'thinkbit',
-        'password' => 'thinkbit',
+        'username' => 'root',
+        'password' => 'ws_Tb_sas31121F',
         'charset' => 'utf8',
         'options' => [
             \PDO::ATTR_STRINGIFY_FETCHES => false,

@@ -28,6 +28,7 @@ class TaskModel
     const TASK_STATUS_0 = 0;    //未完成
     const TASK_STATUS_1 = 1;    //已完成
     const TASK_STATUS_2 = 2;    //持续完成
+    const TASK_STATUS_3 = 3;    //敬请期待
 
     const SIGN_IN_STATUS_0 = 0; //签到失败
     const SIGN_IN_STATUS_1 = 1; //签到成功
@@ -46,7 +47,7 @@ class TaskModel
         }
         $taskList = (new mysql\TaskConfModel())->getTaskConfList();
         if (empty($taskList)) {
-            return [];
+            return [[], []];
         }
         $normalList = $advancedList = [];
         foreach ($taskList as &$v) {
@@ -95,6 +96,9 @@ class TaskModel
             }
             if (self::TASK_CONF_ID_4 === $v['id']) {       //持续完成
                 $v['task_status'] = self::TASK_STATUS_2;
+            }
+            if ($v['task_type'] === mysql\TaskModel::TASK_TYPE_2) {
+                $v['task_status'] = self::TASK_STATUS_3;
             }
         }
         return $taskList;

@@ -24,7 +24,7 @@ class TaskController extends BaseController
             'normal_number' => count($normalList),
             'advanced_number' => count($advancedList),
             'normal_list' => $taskModel->getTaskStatus($this->userId, $this->openId, $normalList),
-            'advanced_list' => $advancedList
+            'advanced_list' => $taskModel->getTaskStatus($this->userId, $this->openId, $advancedList)
         ];
         $this->renderJson(0, 'success', $data);
     }
