@@ -1,4 +1,5 @@
 <?php
+
 namespace Deployer;
 
 require 'recipe/common.php';
@@ -10,7 +11,7 @@ set('application', 'candy-api');
 set('repository', 'https://github.com/thinkbitpro/candy-api.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true); 
+set('git_tty', true);
 
 // Shared files/dirs between deploys 
 set('shared_files', []);
@@ -22,9 +23,15 @@ set('writable_dirs', []);
 
 // Hosts
 
-host('10.10.30.21')
-    ->set('deploy_path', '~/www/{{application}}');
-    
+//test
+//host('10.10.30.21')
+//    ->set('deploy_path', '~/www/{{application}}');
+
+//online
+host('47.95.203.69')
+    ->user('xiangqian')
+    ->port(22)
+    ->set('deploy_path', '/var/www/{{application}}');
 
 // Tasks
 

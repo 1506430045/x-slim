@@ -12,14 +12,14 @@ namespace Config\db;
 
 class MysqlConfig
 {
-    //线上 thinkbit thinkbit
+    //线上 root root
     //测试 root   ws_Tb_sas31121F
     //本机 root   123456
     public static $baseConfig = [
         'host' => '127.0.0.1',
         'dbname' => 'candy',
         'username' => 'root',
-        'password' => 'ws_Tb_sas31121F',
+        'password' => 'root',
         'charset' => 'utf8',
         'options' => [
             \PDO::ATTR_STRINGIFY_FETCHES => false,
