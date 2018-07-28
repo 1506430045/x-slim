@@ -10,6 +10,7 @@ namespace App\model\user\redis;
 
 
 use App\model\RedisModel;
+use App\model\task\TaskModel;
 use Config\db\RedisConfig;
 use Util\LoggerUtil;
 
@@ -183,11 +184,11 @@ class UserModel
         }
 
         if (!$re1) {        //当日已签到，不可重复签到
-            return 2;
+            return TaskModel::SIGN_IN_STATUS_2;
         }
         if ($re1 && $re2) { //签到成功
-            return 1;
+            return TaskModel::SIGN_IN_STATUS_1;
         }
-        return 0;   //设置失败或设置异常
+        return TaskModel::SIGN_IN_STATUS_1;   //设置失败或设置异常
     }
 }

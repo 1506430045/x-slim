@@ -124,13 +124,19 @@ class TaskModel
      * 签到生成任务及奖励
      *
      * @param int $userId
-     * @return int
+     * @return array
      */
     public function createSignInTask(int $userId)
     {
-        $flag = (new RedisUserModel())->setUserSignFlag($userId);
-        if ($flag !== 1) {  //已签到或异常
-            return -1;
+        $currencyName = 'TB';
+        $currencyNumber = 0;
+        $signStatus = (new RedisUserModel())->setUserSignFlag($userId);
+        if ($signStatus === TaskModel::SIGN_IN_STATUS_2) {  //重复签到
+            return [
+                'status' => $signStatus,
+                'currency_name' => $currencyName,
+                'currency_number' => $currencyNumber
+            ];
         }
         $taskConf = $this->getTaskConfById(TaskConfModel::TASK_CONF_ID_1);
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
@@ -146,7 +152,19 @@ class TaskModel
             ];
             (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency, '每日登录');
         }
-        return $id;
+        if ($id > 0) {  //签到成功
+            return [
+                'status' => TaskModel::SIGN_IN_STATUS_1,
+                'currency_name' => $taskConf['currency_name'],
+                'currency_number' => floatval($taskConf['currency_number'])
+            ];
+        } else {        //签到失败
+            return [
+                'status' => TaskModel::SIGN_IN_STATUS_0,
+                'currency_name' => $taskConf['currency_name'],
+                'currency_number' => floatval($taskConf['currency_number'])
+            ];
+        }
     }
 
     /**
