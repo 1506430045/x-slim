@@ -19,8 +19,10 @@ class RewardController extends BaseController
     //糖果记录
     public function list()
     {
+        $id = $this->getInt('id', 0);
+
         $waitList = (new MiningModel())->getMiningList($this->userId);
-        $rewardList = (new RewardModel())->getRewardList($this->userId);
+        $rewardList = (new RewardModel())->getRewardList($this->userId, $id);
         $tbAsset = (new AssetModel())->getUserTotalAsset($this->userId, 'TB');
         $data = [
             'currency_name' => $tbAsset['currency_name'] ?? 'TB',

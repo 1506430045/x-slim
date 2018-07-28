@@ -53,15 +53,23 @@ class RewardModel extends BaseModel
      * 获取奖励列表
      *
      * @param int $userId
+     * @param int $id
      * @return array
      */
-    public function getRewardList(int $userId)
+    public function getRewardList(int $userId, int $id)
     {
+        if ($id < 0) {
+            return [];
+        }
         try {
-            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
+            $pdo = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
                 ->where('user_id', '=', $userId)
                 ->order('id desc')
-                ->getList(['currency_name', 'currency_number', 'reward_description', 'created_at']);
+                ->limit(10);
+            if ($id !== 0) {
+                $pdo->where('id', '<', $id);
+            }
+            $list = $pdo->getList(['id', 'currency_name', 'currency_number', 'reward_description', 'created_at']);
             if (empty($list)) {
                 return [];
             }

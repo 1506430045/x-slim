@@ -12,15 +12,11 @@ namespace App\model\task\mysql;
 
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
-use Util\LoggerUtil;
 
 class TaskModel
 {
     const TASK_TYPE_1 = 1;  //普通任务
     const TASK_TYPE_2 = 2;  //高级任务
-
-    const TASK_STATUS_0 = 0;    //未完成
-    const TASK_STATUS_1 = 1;    //已完成
 
     private $table;
 
@@ -45,7 +41,7 @@ class TaskModel
             'user_id' => $userId,
             'conf_id' => $taskConf['id'],
             'task_type' => $taskConf['task_type'],
-            'task_status' => self::TASK_STATUS_1,
+            'task_status' => 1,
             'currency_id' => $taskConf['currency_id'],
             'currency_name' => $taskConf['currency_name'],
             'currency_number' => $taskConf['currency_number'],
@@ -74,7 +70,7 @@ class TaskModel
             'user_id' => $userId,
             'conf_id' => $taskConf['id'],
             'task_type' => $taskConf['task_type'],
-            'task_status' => self::TASK_STATUS_1,
+            'task_status' => 1,
             'currency_id' => $taskConf['currency_id'],
             'currency_name' => $taskConf['currency_name'],
             'currency_number' => $taskConf['currency_number'],
