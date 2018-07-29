@@ -127,7 +127,8 @@ class UserController extends BaseController
             $this->renderJson(400, '手机号码格式有误，请重试');
         }
         $userModel = new UserModel();
-        if ($userModel->getUserByOpenId($this->openId)) {
+        $userInfo = $userModel->getUserByOpenId($this->openId);
+        if (!empty($userInfo['phone'])) {
             $this->renderJson(400, '已绑定手机号码，无需重复操作');
         }
         $code = SmsUtil::generateCode();

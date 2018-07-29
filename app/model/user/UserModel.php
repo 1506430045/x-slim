@@ -198,7 +198,7 @@ class UserModel extends BaseModel
      * @param int $ttl
      * @return int
      */
-    public function setUserSmsCode($userId, $phone, $smsCode, $ttl = 600)
+    public function setUserSmsCode($userId, $phone, $smsCode, $ttl = 300)
     {
         return (new redis\UserModel)->setUserSmsCode($userId, $phone, $smsCode, $ttl);
     }

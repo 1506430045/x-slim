@@ -116,6 +116,8 @@ class MiningModel extends BaseModel
                 if (!$create) {
                     LoggerUtil::getInstance()->warning(sprintf('创建奖励记录失败，%s, $s', __METHOD__, json_encode(func_get_args())));
                 }
+                $cacheKey = sprintf("get:mining:list:%d", $userId);
+                CacheUtil::delCache($cacheKey);
             }
             return $re;
         } catch (\Exception $e) {

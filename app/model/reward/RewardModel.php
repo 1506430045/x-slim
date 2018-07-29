@@ -13,6 +13,7 @@ namespace App\model\reward;
 use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use Util\CacheUtil;
 
 class RewardModel extends BaseModel
 {
@@ -46,6 +47,10 @@ class RewardModel extends BaseModel
             $sql1,
             $sql2
         ];
+        $assetCacheKey = sprintf("get:user:total:asset:%d:%s", $userId, 'TB');    //清除总资产缓存
+        CacheUtil::delCache($assetCacheKey);
+        $rewardCacheKey = sprintf("get:reward:list:%d:%d", $userId, 0);;          //清除奖励列表缓存
+        CacheUtil::delCache($rewardCacheKey);
         return PdoModel::getInstance(MysqlConfig::$baseConfig)->executeTransaction($sql);
     }
 
@@ -60,6 +65,10 @@ class RewardModel extends BaseModel
     {
         if ($id < 0) {
             return [];
+        }
+        $cacheKey = sprintf("get:reward:list:%d:%d", $userId, $id);
+        if ($id === 0 && $data = CacheUtil::getCache($cacheKey)) {  //只缓存第一页
+            return $data;
         }
         try {
             $pdo = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
@@ -76,6 +85,9 @@ class RewardModel extends BaseModel
             foreach ($list as &$v) {
                 $v['currency_number'] = floatval($v['currency_number']);
                 $v['created_at'] = self::getTimeStr($v['created_at']);
+            }
+            if ($id === 0) {
+                CacheUtil::setCache($cacheKey, $list, 600);
             }
             return $list;
         } catch (\Exception $e) {
