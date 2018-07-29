@@ -19,7 +19,7 @@ class MysqlConfig
         'host' => '127.0.0.1',
         'dbname' => 'candy',
         'username' => 'root',
-        'password' => 'root',
+        'password' => 'ws_Tb_sas31121F',
         'charset' => 'utf8',
         'options' => [
             \PDO::ATTR_STRINGIFY_FETCHES => false,
