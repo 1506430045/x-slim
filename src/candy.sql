@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-07-28 02:29:35
+-- Generation Time: 2018-07-29 23:58:51
 -- 服务器版本： 5.7.22
 -- PHP Version: 7.1.14
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `candy`
 --
+CREATE DATABASE IF NOT EXISTS `candy` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `candy`;
 
 -- --------------------------------------------------------
 
@@ -228,6 +230,7 @@ CREATE TABLE `candy_task_conf` (
   `task_description` varchar(512) NOT NULL DEFAULT '' COMMENT '任务描述',
   `task_type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '任务类型 1基本任务 2高级任务',
   `task_cycle` tinyint(2) NOT NULL DEFAULT '0' COMMENT '任务周期 1每日 2每周 3一次性 4无限制',
+  `task_sort` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '任务展示顺序',
   `currency_id` int(11) NOT NULL DEFAULT '0' COMMENT '货币种类',
   `currency_name` varchar(16) NOT NULL DEFAULT '' COMMENT '奖励币种',
   `currency_number` decimal(36,18) DEFAULT '0.000000000000000000' COMMENT '奖励数量',
@@ -239,11 +242,16 @@ CREATE TABLE `candy_task_conf` (
 -- 转存表中的数据 `candy_task_conf`
 --
 
-INSERT INTO `candy_task_conf` (`id`, `task_name`, `task_description`, `task_type`, `task_cycle`, `currency_id`, `currency_name`, `currency_number`, `created_at`, `updated_at`) VALUES
-(1, '每日登录', '每日签到任务，奖励5TB糖果', 1, 1, 1, 'TB', '5.000000000000000000', '2018-07-19 04:31:31', '2018-07-24 12:52:41'),
-(2, '七日登录', '每周内连续7天签到可以另外获取15TB糖果', 1, 2, 1, 'TB', '15.000000000000000000', '2018-07-19 04:34:13', '2018-07-24 12:53:09'),
-(3, '绑定手机', '绑定手机号码，奖励50TB糖果', 1, 3, 1, 'TB', '50.000000000000000000', '2018-07-19 04:35:44', '2018-07-24 12:53:15'),
-(4, '邀请好友', '邀请用户进小程序，奖励100TB糖果', 1, 4, 1, 'TB', '100.000000000000000000', '2018-07-19 04:35:44', '2018-07-24 12:53:24');
+INSERT INTO `candy_task_conf` (`id`, `task_name`, `task_description`, `task_type`, `task_cycle`, `task_sort`, `currency_id`, `currency_name`, `currency_number`, `created_at`, `updated_at`) VALUES
+(1, '每日登录', '每日签到任务，奖励5TB糖果', 1, 1, 1, 1, 'TB', '5.000000000000000000', '2018-07-19 04:31:31', '2018-07-29 15:16:49'),
+(2, '七日登录', '每周内连续7天签到可以另外获取15TB糖果', 1, 2, 2, 1, 'TB', '15.000000000000000000', '2018-07-19 04:34:13', '2018-07-29 15:16:58'),
+(3, '绑定手机', '绑定手机号码，奖励50TB糖果', 1, 3, 4, 1, 'TB', '50.000000000000000000', '2018-07-19 04:35:44', '2018-07-29 15:17:08'),
+(4, '邀请好友', '邀请用户进小程序，奖励100TB糖果', 1, 4, 3, 1, 'TB', '100.000000000000000000', '2018-07-19 04:35:44', '2018-07-29 15:17:05'),
+(5, '实名认证', '在官网进行实名认证', 2, 3, 0, 1, 'TB', '100.000000000000000000', '2018-07-19 04:35:44', '2018-07-28 07:36:22'),
+(6, '充币', '在官网进行充值', 2, 3, 0, 1, 'TB', '100.000000000000000000', '2018-07-19 04:35:44', '2018-07-28 07:36:22'),
+(7, '交易', '在官网进行交易', 2, 3, 0, 1, 'TB', '100.000000000000000000', '2018-07-19 04:35:44', '2018-07-28 07:36:22'),
+(8, '下载APP', '下载APP', 2, 3, 0, 1, 'TB', '100.000000000000000000', '2018-07-19 04:35:44', '2018-07-28 07:36:22'),
+(9, '关注公众号', '关注ThinkBit微信公众号', 1, 4, 5, 1, 'TB', '100.000000000000000000', '2018-07-19 04:35:44', '2018-07-29 15:17:14');
 
 -- --------------------------------------------------------
 
@@ -335,7 +343,6 @@ ALTER TABLE `candy_reward`
 --
 ALTER TABLE `candy_task`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uniq_conf_date` (`conf_id`,`created_date`),
   ADD KEY `idx_user_created_at` (`user_id`,`created_at`),
   ADD KEY `idx_created_at` (`created_at`);
 
@@ -416,7 +423,7 @@ ALTER TABLE `candy_task`
 -- 使用表AUTO_INCREMENT `candy_task_conf`
 --
 ALTER TABLE `candy_task_conf`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID', AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID', AUTO_INCREMENT=10;
 
 --
 -- 使用表AUTO_INCREMENT `candy_user`
