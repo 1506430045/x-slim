@@ -56,6 +56,7 @@ class MiningModel extends BaseModel
             }
             $currencyList = (new CurrencyModel())->getCurrencyList();
             foreach ($list as &$v) {
+                $v['currency_number'] = floatval($v['currency_number']);
                 $v['effective_time'] = date('Y-m-d H:i:s', $v['effective_time']);
                 $v['dead_time'] = date('Y-m-d H:i:s', $v['dead_time']);
                 $currencyId = $v['currency_id'];
