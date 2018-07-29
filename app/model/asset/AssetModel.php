@@ -154,7 +154,7 @@ class AssetModel extends BaseModel
             $v['currency_number'] = floatval($v['currency_number']);
         }
 
-        CacheUtil::setCache($cacheKey, $data, 5);
+        CacheUtil::setCache($cacheKey, $data, 3);
         return $assetList;
     }
 }

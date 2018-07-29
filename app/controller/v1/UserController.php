@@ -126,8 +126,12 @@ class UserController extends BaseController
         if (!self::checkPhoneCode($phone)) {
             $this->renderJson(400, '手机号码格式有误，请重试');
         }
+        $userModel = new UserModel();
+        if ($userModel->getUserByOpenId($this->openId)) {
+            $this->renderJson(400, '已绑定手机号码，无需重复操作');
+        }
         $code = SmsUtil::generateCode();
-        $re = (new UserModel())->setUserSmsCode($this->userId, $phone, $code);  //验证码默认5分钟内有效
+        $re = $userModel->setUserSmsCode($this->userId, $phone, $code);  //验证码默认5分钟内有效
         if ($re === 2) {
             $this->renderJson(400, '请不要短时间内重复获取验证码');
         }

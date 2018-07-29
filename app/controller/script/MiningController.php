@@ -88,9 +88,13 @@ class MiningController
         $currencyId = 1;
         $currencyName = 'TB';
 
-        foreach ($userIds as $userId) {
-            foreach (self::MINING_CREATE_TIME as $time) {
-                $effectiveTime = strtotime($date . ' ' . $time);
+        foreach (self::MINING_CREATE_TIME as $time) {
+            $effectiveTime = strtotime($date . ' ' . $time);    //挖矿生效时间
+            $diffTime = $effectiveTime - time();
+            if ($diffTime > 3600 || $diffTime < 0) {
+                continue;
+            }
+            foreach ($userIds as $userId) {
                 $randomNum = $this->randomNum(self::CURRENCY_NUM_PER_TIME, self::MINING_NUM_PER_TIME);
                 foreach ($randomNum as $currencyNumber) {
                     $sql .= " ({$userId}, {$miningStatus}, {$currencyId}, '{$currencyName}', {$currencyNumber}, {$effectiveTime}, {$deadTime}),";

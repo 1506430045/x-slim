@@ -15,6 +15,7 @@ use App\model\currency\CurrencyModel;
 use App\model\PdoModel;
 use App\model\reward\RewardModel;
 use Config\db\MysqlConfig;
+use Util\CacheUtil;
 use Util\LoggerUtil;
 
 class MiningModel extends BaseModel
@@ -37,6 +38,10 @@ class MiningModel extends BaseModel
      */
     public function getMiningList(int $userId)
     {
+        $cacheKey = sprintf("get:mining:list:%d", $userId);
+        if ($data = CacheUtil::getCache($cacheKey)) {
+            return $data;
+        }
         $now = time();
         try {
             $pdo = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table);
@@ -57,6 +62,7 @@ class MiningModel extends BaseModel
                 $v['currency_icon'] = $currencyList[$currencyId]['currency_icon'] ?? '';
                 unset($v['currency_id']);
             }
+            CacheUtil::setCache($cacheKey, $list, 600);
             return $list;
         } catch (\Exception $e) {
             return [];

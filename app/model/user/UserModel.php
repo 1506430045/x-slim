@@ -38,6 +38,9 @@ class UserModel extends BaseModel
         if (!is_array($arr) || empty($openId)) {
             return 0;
         }
+        if ($this->getUserByOpenId($openId)) {
+            return 0;
+        }
         $inviter = $this->checkInviteCode($inviteCode);
         $data = [
             'openid' => $openId,
@@ -140,6 +143,10 @@ class UserModel extends BaseModel
         $data = [
             'invite_code' => $inviteCode
         ];
+        $userInfo = $this->getUserByOpenId($openId);
+        if (!empty($userInfo['invite_code']) && $userInfo['invite_code'] === $inviteCode) {
+            return 0;
+        }
         try {
             //保存手机信息到Mysql
             $pdo = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user');
