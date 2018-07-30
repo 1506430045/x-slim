@@ -79,7 +79,6 @@ class InviteModel extends BaseModel
         $data = [
             'invite_status' => self::INVITE_STATUS_1
         ];
-        LoggerUtil::getInstance()->info('00000');
         try {
             $re = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
                 ->where('inviter', '=', $inviter)
@@ -90,8 +89,10 @@ class InviteModel extends BaseModel
             if ($re) {
                 (new RewardModel)->createRewardRecord($inviter, RewardModel::REWARD_TYPE_3, $row['id'], $row, $description);
             }
+            LoggerUtil::getInstance()->info($re ? 'ok' : 'not ok');
             return $re;
         } catch (\Exception $e) {
+            LoggerUtil::getInstance()->info($e->getMessage());
             return 0;
         }
     }
