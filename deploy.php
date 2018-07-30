@@ -28,10 +28,10 @@ host('10.10.30.21')
     ->set('deploy_path', '~/www/{{application}}');
 
 //online
-//host('47.95.203.69')
-//    ->user('xiangqian')
-//    ->port(22)
-//    ->set('deploy_path', '/var/www/{{application}}');
+host('47.95.203.69')
+    ->user('xiangqian')
+    ->port(22)
+    ->set('deploy_path', '/var/www/{{application}}');
 
 // Tasks
 
