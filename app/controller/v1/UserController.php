@@ -95,28 +95,29 @@ class UserController extends BaseController
         }
 
         if (empty($verifyCode) || strlen($verifyCode) !== SmsUtil::SMS_CODE_LEN) {
-            $this->renderJson(400, '验证码格式有误，请重试');
+            $this->renderJson(UserModel::SMS_CHECK_CODE_ERROR, '验证码格式有误，请重试');
         }
 
         $userModel = new UserModel();
 
         $checkStatus = $userModel->checkUserSmsCode($this->userId, $phone, $verifyCode);
         if ($checkStatus === UserModel::CHECK_SMS_CODE_EXPIRED) {
-            $this->renderJson(400, '验证码已过期，请重新获取');
+            $this->renderJson(UserModel::SMS_CHECK_CODE_EXPIRE, '验证码已过期，请重新获取');
         }
         if ($checkStatus === UserModel::CHECK_SMS_CODE_FAILED) {
-            $this->renderJson(400, '验证码错误，请检查');
+            $this->renderJson(UserModel::SMS_CHECK_CODE_ERROR, '验证码错误，请检查');
         }
 
         $rowCount = $userModel->bindPhone($this->userId, $this->openId, $phone);
         if ($rowCount === 1) {
             $message = '绑定成功';
             $stats = 1;
+            $this->renderJson(0, $message, ['status' => $stats]);
         } else {
             $message = '该号码已被绑定，请换号码重试';
             $stats = 2;
+            $this->renderJson(UserModel::SMS_CHECK_CODE_PHONE_REPEAT, $message, ['status' => $stats]);
         }
-        $this->renderJson(0, $message, ['status' => $stats]);
     }
 
     //获取短信验证码
