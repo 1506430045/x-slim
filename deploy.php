@@ -24,8 +24,8 @@ set('writable_dirs', []);
 // Hosts
 
 //test
-host('10.10.30.21')
-    ->set('deploy_path', '~/www/{{application}}');
+//host('10.10.30.21')
+//    ->set('deploy_path', '~/www/{{application}}');
 
 //online
 host('47.95.203.69')

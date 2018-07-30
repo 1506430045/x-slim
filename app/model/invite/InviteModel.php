@@ -86,7 +86,7 @@ class InviteModel extends BaseModel
                 ->where('invitee_status', '=', self::INVITE_STATUS_0)
                 ->update($data);
             if ($re) {
-                (new RewardModel)->createRewardRecord($inviter, self::REWARD_TYPE_3, $row, $description);
+                (new RewardModel)->createRewardRecord($inviter, RewardModel::REWARD_TYPE_3, $row, $description);
             }
         } catch (\Exception $e) {
             return 0;
