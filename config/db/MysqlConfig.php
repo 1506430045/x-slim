@@ -20,7 +20,7 @@ class MysqlConfig
         'dbname' => 'candy',
         'username' => 'root',
         'password' => 'root',
-        'charset' => 'utf8',
+        'charset' => 'utf8mb4',
         'options' => [
             \PDO::ATTR_STRINGIFY_FETCHES => false,
             \PDO::ATTR_EMULATE_PREPARES => false,

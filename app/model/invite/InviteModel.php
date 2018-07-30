@@ -16,6 +16,7 @@ use App\model\reward\RewardModel;
 use App\model\task\mysql\TaskConfModel;
 use App\model\user\UserModel;
 use Config\db\MysqlConfig;
+use Util\LoggerUtil;
 
 class InviteModel extends BaseModel
 {
@@ -78,12 +79,14 @@ class InviteModel extends BaseModel
         $data = [
             'invite_status' => self::INVITE_STATUS_1
         ];
+        LoggerUtil::getInstance()->info('00000');
         try {
             $re = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
                 ->where('inviter', '=', $inviter)
                 ->where('invitee', '=', $invitee)
                 ->where('invite_status', '=', self::INVITE_STATUS_0)
                 ->update($data);
+            LoggerUtil::getInstance()->info('11111');
             if ($re) {
                 (new RewardModel)->createRewardRecord($inviter, RewardModel::REWARD_TYPE_3, $row['id'], $row, $description);
             }
