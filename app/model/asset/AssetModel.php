@@ -20,6 +20,8 @@ use Util\LoggerUtil;
 
 class AssetModel extends BaseModel
 {
+    const TB_NAME = '糖果';
+
     private $table;
 
     public function __construct()
@@ -93,7 +95,7 @@ class AssetModel extends BaseModel
     {
         if (empty($userId) || empty($currencyName) || empty($assetList)) {
             return [
-                'currency_name' => 'TB',
+                'currency_name' => self::TB_NAME,
                 'currency_number' => 0
             ];
         }
@@ -109,7 +111,7 @@ class AssetModel extends BaseModel
             $asset += $v['currency_number'] * $exchangeRate;
         }
         $data = [
-            'currency_name' => $currencyName,
+            'currency_name' => self::TB_NAME,
             'currency_number' => $asset
         ];
         CacheUtil::setCache($cacheKey, $data, 600);
@@ -149,7 +151,7 @@ class AssetModel extends BaseModel
         foreach ($assetList as &$v) {
             $currencyInfo = $currencyList[$v['currency_id']];
             $v['icon'] = $currencyInfo['currency_icon'];
-            $v['currency_name'] = $currencyInfo['currency_name'];
+            $v['currency_name'] = AssetModel::TB_NAME;
             $v['description'] = $currencyInfo['currency_description'];
             $v['currency_number'] = floatval($v['currency_number']);
         }

@@ -10,6 +10,7 @@
 namespace App\model\mall;
 
 
+use App\model\asset\AssetModel;
 use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
@@ -40,6 +41,7 @@ class MallModel extends BaseModel
             }
             foreach ($list as &$v) {
                 $v['currency_number'] = floatval($v['currency_number']);
+                $v['currency_name'] = AssetModel::TB_NAME;
             }
             return $list;
         } catch (\Exception $e) {

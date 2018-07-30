@@ -10,6 +10,7 @@
 namespace App\model\reward;
 
 
+use App\model\asset\AssetModel;
 use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
@@ -89,6 +90,7 @@ class RewardModel extends BaseModel
                 return [];
             }
             foreach ($list as &$v) {
+                $v['currency_name'] = AssetModel::TB_NAME;
                 $v['currency_number'] = floatval($v['currency_number']);
                 $v['created_at'] = self::getTimeStr($v['created_at']);
             }

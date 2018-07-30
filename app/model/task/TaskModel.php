@@ -10,6 +10,7 @@
 namespace App\model\task;
 
 
+use App\model\asset\AssetModel;
 use App\model\reward\RewardModel;
 use App\model\task\mysql\TaskConfModel;
 use App\model\task\mysql\TaskModel as MysqlTaskModel;
@@ -53,6 +54,7 @@ class TaskModel
         $normalList = $advancedList = [];
         foreach ($taskList as &$v) {
             $v['currency_number'] = floatval($v['currency_number']);
+            $v['currency_name'] = AssetModel::TB_NAME;
             if ($v['task_type'] === mysql\TaskModel::TASK_TYPE_1) {
                 $normalList[] = $v;
             }
@@ -136,7 +138,7 @@ class TaskModel
      */
     public function createSignInTask(int $userId)
     {
-        $currencyName = 'TB';
+        $currencyName = AssetModel::TB_NAME;
         $currencyNumber = 0;
         $signStatus = (new RedisUserModel())->setUserSignFlag($userId);
         if ($signStatus === TaskModel::SIGN_IN_STATUS_2) {  //重复签到
