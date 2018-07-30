@@ -48,8 +48,7 @@ class InviteModel extends BaseModel
         ];
         try {
             return PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->insert($data);
-        } catch
-        (\Exception $e) {
+        } catch (\Exception $e) {
             return 0;
         }
     }

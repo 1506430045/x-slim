@@ -14,6 +14,7 @@ use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
 use Util\CacheUtil;
+use Util\LoggerUtil;
 
 class RewardModel extends BaseModel
 {
@@ -51,7 +52,12 @@ class RewardModel extends BaseModel
         CacheUtil::delCache($assetCacheKey);
         $rewardCacheKey = sprintf("get:reward:list:%d:%d", $userId, 0);;          //清除奖励列表缓存
         CacheUtil::delCache($rewardCacheKey);
-        return PdoModel::getInstance(MysqlConfig::$baseConfig)->executeTransaction($sql);
+        try {
+            return PdoModel::getInstance(MysqlConfig::$baseConfig)->executeTransaction($sql);
+        } catch (\Exception $e) {
+            LoggerUtil::getInstance()->info("创建奖励记录异常，params=%s, exception=%s", func_get_args(), $e->getMessage());
+            return false;
+        }
     }
 
     /**
