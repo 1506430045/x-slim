@@ -83,7 +83,7 @@ class InviteModel extends BaseModel
             $re = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
                 ->where('inviter', '=', $inviter)
                 ->where('invitee', '=', $invitee)
-                ->where('invitee_status', '=', self::INVITE_STATUS_0)
+                ->where('invite_status', '=', self::INVITE_STATUS_0)
                 ->update($data);
             if ($re) {
                 (new RewardModel)->createRewardRecord($inviter, RewardModel::REWARD_TYPE_3, $row, $description);
