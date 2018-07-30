@@ -24,7 +24,7 @@ class MysqlConfig
         'options' => [
             \PDO::ATTR_STRINGIFY_FETCHES => false,
             \PDO::ATTR_EMULATE_PREPARES => false,
-            \PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8",
+            \PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4",
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
         ]
     ];
