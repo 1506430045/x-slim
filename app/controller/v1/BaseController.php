@@ -16,6 +16,8 @@ use Slim\Http\Response;
 
 class BaseController extends \App\controller\BaseController
 {
+    const CODE_NEED_LOGIN = 1025;
+
     protected $openId = '';
     protected $sessionKey = '';
     protected $userId = 0;
@@ -40,7 +42,7 @@ class BaseController extends \App\controller\BaseController
         $token = $this->request->getHeaderLine('token');
         $session3Rd = (new WechatModel)->get3rdSession($token);
         if (empty($token) || !$session3Rd) {
-            $this->renderJson(403, 'token无效');
+            $this->renderJson(self::CODE_NEED_LOGIN, 'token无效');
         }
         list($openId, $sessionKey) = explode(' ', $session3Rd);
         $this->openId = $openId;
