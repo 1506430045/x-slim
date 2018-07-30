@@ -24,6 +24,7 @@ class TaskModel
     const TASK_CONF_ID_2 = 2;   //七日登录
     const TASK_CONF_ID_3 = 3;   //绑定手机
     const TASK_CONF_ID_4 = 4;   //邀请好友
+    const TASK_CONF_ID_9 = 9;   //关注公众号
 
     const TASK_STATUS_0 = 0;    //未完成
     const TASK_STATUS_1 = 1;    //已完成
@@ -96,6 +97,9 @@ class TaskModel
             }
             if (self::TASK_CONF_ID_4 === $v['id']) {       //持续完成
                 $v['task_status'] = self::TASK_STATUS_0;
+            }
+            if (self::TASK_CONF_ID_9 === $v['id']) {       //关注公众号
+                $v['task_status'] = self::TASK_STATUS_3;
             }
             if ($v['task_type'] === mysql\TaskModel::TASK_TYPE_2) {
                 $v['task_status'] = self::TASK_STATUS_3;
