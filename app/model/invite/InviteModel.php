@@ -68,7 +68,7 @@ class InviteModel extends BaseModel
             $row = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
                 ->where('invitee', '=', $invitee)
                 ->where('inviter', '=', $inviter)
-                ->getRow(['currency_id', 'currency_name', 'currency_number', 'invite_status']);
+                ->getRow(['id', 'currency_id', 'currency_name', 'currency_number', 'invite_status']);
             if (empty($row) || $row['invite_status'] === self::INVITE_STATUS_1) {
                 return 0;
             }
@@ -85,11 +85,9 @@ class InviteModel extends BaseModel
                 ->where('invitee', '=', $invitee)
                 ->where('invite_status', '=', self::INVITE_STATUS_0)
                 ->update($data);
-            LoggerUtil::getInstance()->info('11111');
             if ($re) {
                 (new RewardModel)->createRewardRecord($inviter, RewardModel::REWARD_TYPE_3, $row['id'], $row, $description);
             }
-            LoggerUtil::getInstance()->info($re ? 'ok' : 'not ok');
             return $re;
         } catch (\Exception $e) {
             LoggerUtil::getInstance()->info($e->getMessage());

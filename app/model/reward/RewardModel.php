@@ -48,7 +48,6 @@ class RewardModel extends BaseModel
             $sql1,
             $sql2
         ];
-        LoggerUtil::getInstance()->info('22222');
         $assetCacheKey = sprintf("get:user:total:asset:%d:%s", $userId, 'TB');    //清除总资产缓存
         CacheUtil::delCache($assetCacheKey);
         $rewardCacheKey = sprintf("get:reward:list:%d:%d", $userId, 0);;          //清除奖励列表缓存
