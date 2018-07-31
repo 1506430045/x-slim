@@ -17,6 +17,9 @@ use Util\CacheUtil;
 
 class CurrencyModel extends BaseModel
 {
+    const CURRENCY_STATUS_0 = 0;    //下线
+    const CURRENCY_STATUS_1 = 1;    //上线
+
     private $table;
 
     public function __construct()
@@ -36,7 +39,7 @@ class CurrencyModel extends BaseModel
             return $data;
         }
         try {
-            $data = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->getList();
+            $data = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('currency_status', '=', self::CURRENCY_STATUS_1)->getList();
             if (empty($data)) {
                 return [];
             }
