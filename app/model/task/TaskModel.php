@@ -155,7 +155,7 @@ class TaskModel
         if ($id) {
             $times = (new RedisUserModel)->setUserPerWeekSignTimes($userId); //记录用户当前周签到次数
             LoggerUtil::getInstance()->info('1111111:' . $times);
-            if ($times === '1100000' && $userId === 32) { //7日签到生成任务及奖励 todo
+            if ($times === '1100000' && $userId === 25) { //7日签到生成任务及奖励 todo
                 $this->createSignIn7Task($userId);
             }
             $currency = [
