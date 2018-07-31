@@ -81,7 +81,7 @@ class UserController extends BaseController
         $data = [
             'tb_total' => [
                 'currency_name' => $tbAsset['currency_name'] ?? '',
-                'currency_number' => $tbAsset['currency_number'] ?? 0,
+                'currency_number' => round($tbAsset['currency_number'], 6) ?? 0,
             ],
             'asset_list' => $assetList
         ];

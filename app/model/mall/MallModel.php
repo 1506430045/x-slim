@@ -48,7 +48,7 @@ class MallModel extends BaseModel
                 return [];
             }
             foreach ($list as &$v) {
-                $v['currency_number'] = floatval($v['currency_number']);
+                $v['currency_number'] = round($v['currency_number'], 6);
                 $v['currency_name'] = AssetModel::TB_NAME;
             }
             CacheUtil::setCache($cacheKey, $list);

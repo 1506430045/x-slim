@@ -91,7 +91,7 @@ class RewardModel extends BaseModel
             }
             foreach ($list as &$v) {
                 $v['currency_name'] = AssetModel::TB_NAME;
-                $v['currency_number'] = floatval($v['currency_number']);
+                $v['currency_number'] = round($v['currency_number'], 6);
                 $v['created_at'] = self::getTimeStr($v['created_at']);
             }
             if ($id === 0) {

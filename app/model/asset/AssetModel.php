@@ -159,7 +159,7 @@ class AssetModel extends BaseModel
             $v['icon'] = $currencyInfo['currency_icon'];
             $v['currency_name'] = $currencyInfo['currency_name'];;
             $v['description'] = $currencyInfo['currency_description'];
-            $v['currency_number'] = floatval($v['currency_number']);
+            $v['currency_number'] = round($v['currency_number'], 6);
         }
 
         CacheUtil::setCache($cacheKey, $assetList, 3);

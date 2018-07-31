@@ -54,7 +54,7 @@ class TaskModel
         }
         $normalList = $advancedList = [];
         foreach ($taskList as &$v) {
-            $v['currency_number'] = floatval($v['currency_number']);
+            $v['currency_number'] = round($v['currency_number'], 6);
             $v['currency_name'] = AssetModel::TB_NAME;
             if ($v['task_type'] === mysql\TaskModel::TASK_TYPE_1) {
                 $normalList[] = $v;
@@ -169,13 +169,13 @@ class TaskModel
             return [
                 'status' => TaskModel::SIGN_IN_STATUS_1,
                 'currency_name' => $taskConf['currency_name'],
-                'currency_number' => floatval($taskConf['currency_number'])
+                'currency_number' => round($taskConf['currency_number'], 6)
             ];
         } else {        //签到失败
             return [
                 'status' => TaskModel::SIGN_IN_STATUS_0,
                 'currency_name' => $taskConf['currency_name'],
-                'currency_number' => floatval($taskConf['currency_number'])
+                'currency_number' => round($taskConf['currency_number'], 6)
             ];
         }
     }

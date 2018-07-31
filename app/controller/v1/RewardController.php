@@ -26,7 +26,7 @@ class RewardController extends BaseController
         $tbAsset = (new AssetModel())->getUserTotalAsset($this->userId, 'TB');
         $data = [
             'currency_name' => $tbAsset['currency_name'] ?? AssetModel::TB_NAME,
-            'currency_number' => !empty($tbAsset['currency_number']) ? floatval($tbAsset['currency_number']) : 0.0,
+            'currency_number' => !empty($tbAsset['currency_number']) ? round($tbAsset['currency_number'], 6) : 0.0,
             'reward_list' => $rewardList,
             'wait_list' => $waitList
         ];

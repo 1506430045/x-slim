@@ -39,11 +39,11 @@ class IndexController extends BaseController
         $data = [
             'tb_total' => [
                 'currency_name' => $tbAsset['currency_name'] ?? 'TB',
-                'currency_number' => !empty($tbAsset['currency_number']) ? floatval($tbAsset['currency_number']) : 0.0
+                'currency_number' => !empty($tbAsset['currency_number']) ? round($tbAsset['currency_number'], 6) : 0.0
             ],
             'invite_reward' => [
                 'currency_name' => AssetModel::TB_NAME,
-                'currency_number' => floatval($task['currency_number']) ?? 0
+                'currency_number' => round($task['currency_number'], 6) ?? 0
             ]
         ];
         $this->renderJson(0, 'success', $data);
