@@ -14,9 +14,13 @@ use App\model\asset\AssetModel;
 use App\model\BaseModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use Util\CacheUtil;
 
 class MallModel extends BaseModel
 {
+    const GOODS_STATUS_0 = 0;   //未上架
+    const GOODS_STATUS_1 = 1;   //已上架
+
     private $table;
 
     public function __construct()
@@ -31,11 +35,15 @@ class MallModel extends BaseModel
      */
     public function getGoodsList()
     {
+        $cacheKey = 'get:goods:list';
+        if ($data = CacheUtil::getCache($cacheKey)) {
+            return $data;
+        }
         $fields = [
             'id', 'goods_name', 'goods_img', 'stock', 'currency_name', 'currency_number'
         ];
         try {
-            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->getList($fields);
+            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('goods_status', '=', self::GOODS_STATUS_1)->getList($fields);
             if (empty($list)) {
                 return [];
             }
@@ -43,6 +51,7 @@ class MallModel extends BaseModel
                 $v['currency_number'] = floatval($v['currency_number']);
                 $v['currency_name'] = AssetModel::TB_NAME;
             }
+            CacheUtil::setCache($cacheKey, $list);
             return $list;
         } catch (\Exception $e) {
             return [];
