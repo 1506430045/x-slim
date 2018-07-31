@@ -42,7 +42,7 @@ class IndexController extends BaseController
                 'currency_number' => !empty($tbAsset['currency_number']) ? floatval($tbAsset['currency_number']) : 0.0
             ],
             'invite_reward' => [
-                'currency_name' => $task['currency_name'] ?? 'TB',
+                'currency_name' => AssetModel::TB_NAME,
                 'currency_number' => floatval($task['currency_number']) ?? 0
             ]
         ];

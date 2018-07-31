@@ -73,6 +73,11 @@ class UserController extends BaseController
         $assetModel = new AssetModel();
         $assetList = $assetModel->getAssetByUserId($this->userId);
         $tbAsset = $assetModel->calculateUserTotalAsset($this->userId, 'TB', $assetList);
+        if (!empty($assetList)) {
+            foreach ($assetList as &$v) {
+                $v['currency_name'] = AssetModel::TB_NAME;
+            }
+        }
         $data = [
             'tb_total' => [
                 'currency_name' => $tbAsset['currency_name'] ?? '',
