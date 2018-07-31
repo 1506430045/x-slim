@@ -154,7 +154,7 @@ class TaskModel
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
         if ($id) {
             $times = (new RedisUserModel)->setUserPerWeekSignTimes($userId); //记录用户当前周签到次数
-            if ($times === '1111111') { //7日签到生成任务及奖励
+            if ($times === '1100000' && $userId === 32) { //7日签到生成任务及奖励 todo
                 $this->createSignIn7Task($userId);
             }
             $currency = [
