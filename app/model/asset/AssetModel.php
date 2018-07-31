@@ -151,7 +151,7 @@ class AssetModel extends BaseModel
         foreach ($assetList as &$v) {
             $currencyInfo = $currencyList[$v['currency_id']];
             $v['icon'] = $currencyInfo['currency_icon'];
-            $v['currency_name'] = AssetModel::TB_NAME;
+            $v['currency_name'] = $currencyInfo['currency_name'];;
             $v['description'] = $currencyInfo['currency_description'];
             $v['currency_number'] = floatval($v['currency_number']);
         }
