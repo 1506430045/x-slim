@@ -59,8 +59,8 @@ class UserController extends BaseController
     public function signIn()
     {
         $data = (new TaskModel)->createSignInTask($this->userId);
-        if (in_array($data['status'], [TaskModel::SIGN_IN_STATUS_1, TaskModel::SIGN_IN_STATUS_2])) {
-            $message = $data['status'] === TaskModel::SIGN_IN_STATUS_1 ? '签到成功' : '重复签到';
+        if (in_array($data['status'], [TaskModel::SIGN_IN_STATUS_1, TaskModel::SIGN_IN_STATUS_2, TaskModel::SIGN_IN_STATUS_3])) {
+            $message = '签到成功';
             $this->renderJson(0, $message, $data);
         } else {
             $this->renderJson(500, '签到失败', $data);

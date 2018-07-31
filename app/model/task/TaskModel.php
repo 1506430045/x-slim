@@ -36,6 +36,14 @@ class TaskModel
     const SIGN_IN_STATUS_0 = 0; //签到失败
     const SIGN_IN_STATUS_1 = 1; //签到成功
     const SIGN_IN_STATUS_2 = 2; //重复签到
+    const SIGN_IN_STATUS_3 = 3; //7日签到
+
+    public static $signInStatusMap = [
+        self::SIGN_IN_STATUS_0 => '签到失败',
+        self::SIGN_IN_STATUS_1 => '签到成功',
+        self::SIGN_IN_STATUS_2 => '重复签到',
+        self::SIGN_IN_STATUS_3 => '7日签到',
+    ];
 
     /**
      * 获取任务列表
@@ -151,10 +159,19 @@ class TaskModel
         }
         $taskConf = $this->getTaskConfById(TaskConfModel::TASK_CONF_ID_1);
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
+        $sign7Currency = [
+            'currency_name' => 'TB',
+            'currency_number' => 0
+        ];
+        $sign7Flag = false;  //7日签到标志
         if ($id) {
             $times = (new RedisUserModel)->setUserPerWeekSignTimes($userId); //记录用户当前周签到次数
             if ($times === '1111111') { //7日签到生成任务及奖励
-                $this->createSignIn7Task($userId);
+                $sign7 = $this->createSignIn7Task($userId); //7日签到成功
+                if ($sign7['status']) {
+                    $sign7Currency = $sign7['currency'];
+                    $sign7Flag = true;
+                }
             }
             $currency = [
                 'currency_id' => $taskConf['currency_id'],
@@ -163,17 +180,23 @@ class TaskModel
             ];
             (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency, '每日登录');
         }
-        if ($id > 0) {  //签到成功
+        if ($sign7Flag) {
+            return [
+                'status' => TaskModel::SIGN_IN_STATUS_3,
+                'currency_name' => AssetModel::TB_NAME,
+                'currency_number' => round($taskConf['currency_number'] + $sign7Currency['currency_number'], 6)
+            ];
+        } elseif ($id > 0) {  //签到成功
             return [
                 'status' => TaskModel::SIGN_IN_STATUS_1,
-                'currency_name' => $taskConf['currency_name'],
+                'currency_name' => AssetModel::TB_NAME,
                 'currency_number' => round($taskConf['currency_number'], 6)
             ];
         } else {        //签到失败
             return [
                 'status' => TaskModel::SIGN_IN_STATUS_0,
-                'currency_name' => $taskConf['currency_name'],
-                'currency_number' => round($taskConf['currency_number'], 6)
+                'currency_name' => AssetModel::TB_NAME,
+                'currency_number' => 0
             ];
         }
     }
@@ -182,12 +205,13 @@ class TaskModel
      * 7日签到生成任务及奖励
      *
      * @param int $userId
-     * @return int
+     * @return array
      */
     public function createSignIn7Task(int $userId)
     {
         $taskConf = $this->getTaskConfById(TaskConfModel::TASK_CONF_ID_2);
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
+        $currency = [];
         if ($id) {
             $currency = [
                 'currency_id' => $taskConf['currency_id'],
@@ -196,7 +220,10 @@ class TaskModel
             ];
             (new RewardModel())->createRewardRecord($userId, RewardModel::REWARD_TYPE_1, $id, $currency, '7日登录');
         }
-        return $id;
+        return [
+            'status' => $id > 0,
+            'currency' => $currency
+        ];
     }
 
     /**
