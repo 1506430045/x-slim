@@ -23,9 +23,9 @@ class MiningController
 
     //挖矿奖励记录生成时间 次日凌晨3点前不领取将失效
     const MINING_CREATE_TIME = [
-        '05:00:00',
-        '11:00:00',
-        '18:00:00',
+        '05:00:00' => 3,
+        '11:00:00' => 3,
+        '18:00:00' => 4,
     ];
 
     /**
@@ -88,14 +88,14 @@ class MiningController
         $currencyId = 1;
         $currencyName = 'TB';
 
-        foreach (self::MINING_CREATE_TIME as $time) {
+        foreach (self::MINING_CREATE_TIME as $time => $currencyNum) {
             $effectiveTime = strtotime($date . ' ' . $time);    //挖矿生效时间
             $diffTime = $effectiveTime - time();
             if ($diffTime > 3600 || $diffTime < 0) {
                 continue;
             }
             foreach ($userIds as $userId) {
-                $randomNum = $this->randomNum(self::CURRENCY_NUM_PER_TIME, self::MINING_NUM_PER_TIME);
+                $randomNum = $this->randomNum($currencyNum, self::MINING_NUM_PER_TIME);
                 foreach ($randomNum as $currencyNumber) {
                     $sql .= " ({$userId}, {$miningStatus}, {$currencyId}, '{$currencyName}', {$currencyNumber}, {$effectiveTime}, {$deadTime}),";
                 }
