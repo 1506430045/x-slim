@@ -80,7 +80,9 @@ class AssetModel extends BaseModel
      */
     public function getUserTotalAsset(int $userId, string $currencyName = 'TB')
     {
-        return $this->calculateUserTotalAsset($userId, $currencyName, $this->getAssetByUserId($userId));
+        $currency = $this->calculateUserTotalAsset($userId, $currencyName, $this->getAssetByUserId($userId));
+        $currency['currency_number'] = empty($currency['currency_number']) ? 0 : round($currency['currency_number'], 6);
+        return $currency;
     }
 
     /**
