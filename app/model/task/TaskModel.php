@@ -96,7 +96,6 @@ class TaskModel
             }
             if (self::TASK_CONF_ID_3 === $v['id']) {       //绑定手机
                 $user = (new UserModel())->getUserByOpenId($openId);
-                LoggerUtil::getInstance()->info(json_encode($user));
                 $v['task_status'] = !empty($user['phone']) ? self::TASK_STATUS_1 : self::TASK_STATUS_0;
             }
             if (self::TASK_CONF_ID_4 === $v['id']) {       //持续完成
@@ -154,8 +153,7 @@ class TaskModel
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
         if ($id) {
             $times = (new RedisUserModel)->setUserPerWeekSignTimes($userId); //记录用户当前周签到次数
-            LoggerUtil::getInstance()->info('1111111:' . $times);
-            if ($times === '1100000' && $userId === 25) { //7日签到生成任务及奖励 todo
+            if ($times === '1111111') { //7日签到生成任务及奖励
                 $this->createSignIn7Task($userId);
             }
             $currency = [
@@ -190,7 +188,6 @@ class TaskModel
     {
         $taskConf = $this->getTaskConfById(TaskConfModel::TASK_CONF_ID_2);
         $id = (new MysqlTaskModel)->signIn($userId, $taskConf);
-        LoggerUtil::getInstance()->info('222222:' . $id);
         if ($id) {
             $currency = [
                 'currency_id' => $taskConf['currency_id'],

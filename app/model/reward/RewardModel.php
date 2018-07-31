@@ -23,6 +23,8 @@ class RewardModel extends BaseModel
     const REWARD_TYPE_2 = 2;    //挖矿奖励
     const REWARD_TYPE_3 = 3;    //邀请奖励
 
+    const REWARD_LIST_PAGE_NUM = 30;    //奖励列表每页条数
+
     private $table;
 
     public function __construct()
@@ -81,7 +83,7 @@ class RewardModel extends BaseModel
             $pdo = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
                 ->where('user_id', '=', $userId)
                 ->order('id desc')
-                ->limit(10);
+                ->limit(self::REWARD_LIST_PAGE_NUM);
             if ($id !== 0) {
                 $pdo->where('id', '<', $id);
             }

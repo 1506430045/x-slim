@@ -85,8 +85,6 @@ class InviteModel extends BaseModel
                 ->where('invitee', '=', $invitee)
                 ->where('invite_status', '=', self::INVITE_STATUS_0)
                 ->update($data);
-            LoggerUtil::getInstance()->info("$inviter, RewardModel::REWARD_TYPE_3, $description");
-            LoggerUtil::getInstance()->info(json_encode($row));
             if ($re) {
                 (new RewardModel)->createRewardRecord($inviter, RewardModel::REWARD_TYPE_3, $row['id'], $row, $description);
             }
