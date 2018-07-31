@@ -148,7 +148,11 @@ class AssetModel extends BaseModel
             return [];
         }
 
-        foreach ($assetList as &$v) {
+        foreach ($assetList as $k => &$v) {
+            if (empty($currencyList[$v['currency_id']])) {
+                unset($assetList[$k]);
+                continue;
+            }
             $currencyInfo = $currencyList[$v['currency_id']];
             $v['icon'] = $currencyInfo['currency_icon'];
             $v['currency_name'] = $currencyInfo['currency_name'];;
