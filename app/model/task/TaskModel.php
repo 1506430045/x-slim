@@ -18,6 +18,7 @@ use App\model\task\mysql\TaskConfModel as MysqlTaskConfModel;
 use App\model\user\redis\UserModel as RedisUserModel;
 use App\model\user\UserModel;
 use Util\CacheUtil;
+use Util\LoggerUtil;
 
 class TaskModel
 {
@@ -95,6 +96,7 @@ class TaskModel
             }
             if (self::TASK_CONF_ID_3 === $v['id']) {       //绑定手机
                 $user = (new UserModel())->getUserByOpenId($openId);
+                LoggerUtil::getInstance()->info(json_encode($user));
                 $v['task_status'] = !empty($user['phone']) ? self::TASK_STATUS_1 : self::TASK_STATUS_0;
             }
             if (self::TASK_CONF_ID_4 === $v['id']) {       //持续完成
