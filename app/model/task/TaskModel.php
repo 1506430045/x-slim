@@ -166,7 +166,7 @@ class TaskModel
         $sign7Flag = false;  //7日签到标志
         if ($id) {
             $times = (new RedisUserModel)->setUserPerWeekSignTimes($userId); //记录用户当前周签到次数
-            if ($times === '1100000' && $userId === 25) { //7日签到生成任务及奖励
+            if ($times === '1111111') { //7日签到生成任务及奖励
                 $sign7 = $this->createSignIn7Task($userId); //7日签到成功
                 if ($sign7['status']) {
                     $sign7Currency = $sign7['currency'];
