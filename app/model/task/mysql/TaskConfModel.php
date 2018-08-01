@@ -21,6 +21,9 @@ class TaskConfModel
     const TASK_CONF_ID_3 = 3;   //绑定手机 与数据库保持一致
     const TASK_CONF_ID_4 = 4;   //邀请用户 与数据库保持一致
 
+    const TASK_CONF_STATUS_0 = 0;   //任务关闭
+    const TASK_CONF_STATUS_1 = 1;   //任务开启
+
     private $table;
 
     public function __construct()
@@ -37,7 +40,7 @@ class TaskConfModel
     public function getTaskConfList(int $taskType = 0)
     {
         try {
-            $task = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table);
+            $task = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)->where('task_status', '=', self::TASK_CONF_STATUS_1);
             if ($taskType !== 0) {
                 $task->where('task_type', '=', $taskType);
             }
