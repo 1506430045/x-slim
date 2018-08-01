@@ -51,7 +51,7 @@ class RewardModel extends BaseModel
             $sql1,
             $sql2
         ];
-        $assetCacheKey = sprintf("get:asset:by:user_id:%d:%d", $userId, 1);
+        $assetCacheKey = sprintf("get:asset:by:user_id:%d:%d", $userId, 0);
         CacheUtil::delCache($assetCacheKey);
         $rewardCacheKey = sprintf("get:reward:list:%d:%d", $userId, 0);;          //清除奖励列表缓存
         CacheUtil::delCache($rewardCacheKey);

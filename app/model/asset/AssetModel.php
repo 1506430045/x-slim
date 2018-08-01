@@ -124,10 +124,10 @@ class AssetModel extends BaseModel
      */
     public function getAssetByUserId(int $userId, $currencyId = 0)
     {
-//        $cacheKey = sprintf("get:asset:by:user_id:%d:%d", $userId, $currencyId);
-//        if ($data = CacheUtil::getCache($cacheKey)) {
-//            return $data;
-//        }
+        $cacheKey = sprintf("get:asset:by:user_id:%d:%d", $userId, $currencyId);
+        if ($data = CacheUtil::getCache($cacheKey)) {
+            return $data;
+        }
         $currencyList = (new CurrencyModel())->getCurrencyList();   //货币配置
 
         $fields = ['id', 'currency_id', 'currency_number'];
@@ -157,7 +157,7 @@ class AssetModel extends BaseModel
             $v['currency_number'] = round($v['currency_number'], 6);
         }
 
-//        CacheUtil::setCache($cacheKey, $assetList, 60);
+        CacheUtil::setCache($cacheKey, $assetList, 5);
         return $assetList;
     }
 }
