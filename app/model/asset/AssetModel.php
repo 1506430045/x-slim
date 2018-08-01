@@ -101,10 +101,6 @@ class AssetModel extends BaseModel
                 'currency_number' => 0
             ];
         }
-        $cacheKey = sprintf("get:user:total:asset:%d:%s", $userId, $currencyName);
-        if ($data = CacheUtil::getCache($cacheKey)) {
-            return $data;
-        }
         $pairList = (new ExchangeModel())->getPairList();
         $asset = 0;
         foreach ($assetList as $v) {
@@ -116,7 +112,6 @@ class AssetModel extends BaseModel
             'currency_name' => self::TB_NAME,
             'currency_number' => $asset
         ];
-        CacheUtil::setCache($cacheKey, $data, 600);
         return $data;
     }
 
@@ -162,7 +157,7 @@ class AssetModel extends BaseModel
             $v['currency_number'] = round($v['currency_number'], 6);
         }
 
-        CacheUtil::setCache($cacheKey, $assetList, 3);
+        CacheUtil::setCache($cacheKey, $assetList, 60);
         return $assetList;
     }
 }

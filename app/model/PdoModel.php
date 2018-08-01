@@ -80,14 +80,6 @@ class PdoModel
     }
 
     /**
-     * 重置连接
-     */
-    public static function resetConnect()
-    {
-        self::$_instance = null;
-    }
-
-    /**
      * where
      *
      * @param $field
