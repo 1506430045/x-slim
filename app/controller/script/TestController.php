@@ -11,16 +11,20 @@ namespace App\controller\script;
 
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use Util\AesUtil;
 
 class TestController extends BaseController
 {
     public function test()
     {
-        $data = [
-            'openid' => 'xiangqiantest',
-            'nickname' => '向前😝'
-        ];
-        $re = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->insert($data);
-        var_dump($re);
+        try {
+            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->getList();
+            foreach ($list as &$v) {
+                $v['phone'] = AesUtil::decrypt($v['phone']);
+            }
+            var_dump($list);
+        } catch (\Exception $e) {
+            var_dump([]);
+        }
     }
 }
