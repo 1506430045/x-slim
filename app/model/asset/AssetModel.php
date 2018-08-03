@@ -20,7 +20,7 @@ use Util\LoggerUtil;
 
 class AssetModel extends BaseModel
 {
-    const TB_NAME = '糖果';
+    const TB_NAME = '星钻';
 
     private $table;
 
