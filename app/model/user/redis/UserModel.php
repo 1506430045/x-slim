@@ -131,6 +131,10 @@ class UserModel
     {
         $key = sprintf(self::USER_PHONE_SMS_CODE, $userId, $phone);
         $redis = RedisModel::getInstance(RedisConfig::$baseConfig)->redis;
+        $t = $redis->ttl($key);
+        if ($t > 0 && $t <= 240) {
+            $redis->del($key);
+        }
         $re1 = $redis->setnx($key, $smsCode);
         $re2 = false;
         if ($re1) {
