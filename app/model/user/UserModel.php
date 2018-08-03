@@ -234,7 +234,7 @@ class UserModel extends BaseModel
             return self::CHECK_SMS_CODE_EXPIRED;
         }
         if ($verifyCode !== $checkCode) {   //验证码错误
-            return self::CHECK_SMS_CODE_EXPIRED;
+            return self::CHECK_SMS_CODE_FAILED;
         }
         return self::CHECK_SMS_CODE_SUCCESS;   //验证码正确
     }
