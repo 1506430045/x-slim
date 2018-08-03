@@ -58,7 +58,7 @@ class RewardModel extends BaseModel
         try {
             return PdoModel::getInstance(MysqlConfig::$baseConfig)->executeTransaction($sql);
         } catch (\Exception $e) {
-            LoggerUtil::getInstance()->info("创建奖励记录异常，params=%s, exception=%s", func_get_args(), $e->getMessage());
+            LoggerUtil::getInstance()->info(sprintf("创建奖励记录异常，params=%s, exception=%s", func_get_args(), $e->getMessage()));
             return false;
         }
     }

@@ -24,6 +24,12 @@ class MiningModel extends BaseModel
     const MINING_STATUS_1 = 1;  //待领取
     const MINING_STATUS_2 = 2;  //已领取
 
+    const CANDY_ICONS = [
+        'https://static.m960.cn/g4x3.png',
+        'https://static.m960.cn/g24x3.png',
+        'https://static.m960.cn/g34x3.png'
+    ];
+
     private $table;
 
     public function __construct()
@@ -55,14 +61,13 @@ class MiningModel extends BaseModel
             if (empty($list)) {
                 return [];
             }
-            $currencyList = (new CurrencyModel())->getCurrencyList();
             foreach ($list as &$v) {
                 $v['currency_number'] = round($v['currency_number'], 6);
                 $v['currency_name'] = AssetModel::TB_NAME;
                 $v['effective_time'] = date('Y-m-d H:i:s', $v['effective_time']);
                 $v['dead_time'] = date('Y-m-d H:i:s', $v['dead_time']);
                 $currencyId = $v['currency_id'];
-                $v['currency_icon'] = $currencyList[$currencyId]['currency_icon'] ?? '';
+                $v['currency_icon'] = self::CANDY_ICONS[mt_rand(0, 2)];
                 unset($v['currency_id']);
             }
             CacheUtil::setCache($cacheKey, $list, 600);
