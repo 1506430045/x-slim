@@ -15,12 +15,15 @@ use Util\GuzzleUtil;
 
 class WechatModel extends BaseModel
 {
-    //测试
+//    //测试
 //    const APP_ID = 'wx206473ae20f169bb';
 //    const APP_SECRET = '134c38c7709ebccbf4821eb7497d1d8d';
+//    //线上
+//    const APP_ID = 'wxfb2b7642d9c173d7';
+//    const APP_SECRET = 'c23e66dac468af88e0a0c04262a1c6ed';
     //线上
-    const APP_ID = 'wxfb2b7642d9c173d7';
-    const APP_SECRET = 'c23e66dac468af88e0a0c04262a1c6ed';
+    const APP_ID = 'wx6e8c5efc7e653614';
+    const APP_SECRET = '4c6501c8d8fb2ff27c630339fb2499af';
 
     const GRANT_TYPE = 'authorization_code';
     const BASE_URL = 'https://api.weixin.qq.com';
