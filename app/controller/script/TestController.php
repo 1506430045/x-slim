@@ -20,7 +20,7 @@ class TestController extends BaseController
         try {
             $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->getList();
             foreach ($list as &$v) {
-                $v['phone'] = AesUtil::decrypt($v['phone']);
+                $v['phone_1'] = empty($v['phone']) ? '' : AesUtil::decrypt($v['phone']);
             }
             var_dump($list);
         } catch (\Exception $e) {
