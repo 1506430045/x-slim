@@ -44,6 +44,7 @@ class RewardModel extends BaseModel
      */
     public function createRewardRecord($userId, int $rewardType, int $foreignId, array $currency, $description = '')
     {
+        $description = addslashes($description);
         $sql1 = "INSERT INTO `{$this->table}` (user_id, reward_type, foreign_id, currency_id, currency_name, currency_number, reward_description) VALUES ({$userId}, {$rewardType}, {$foreignId}, {$currency['currency_id']}, '{$currency['currency_name']}', {$currency['currency_number']}, '{$description}')";
         $sql2 = "UPDATE `candy_asset` SET currency_number = currency_number + {$currency['currency_number']} WHERE user_id = {$userId} AND currency_id = {$currency['currency_id']} LIMIT 1";
 

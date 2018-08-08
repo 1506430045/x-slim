@@ -11,6 +11,7 @@ namespace App\model\user;
 
 use App\model\asset\AssetModel;
 use App\model\invite\InviteModel;
+use App\model\mining\MiningModel;
 use App\model\task\TaskModel;
 use App\model\user\InviteModel as UserInviteModel;
 use App\model\BaseModel;
@@ -73,6 +74,10 @@ class UserModel extends BaseModel
             if ($userId > 0) {
                 //生成用户TB资产记录
                 (new AssetModel())->createUserAsset($userId);
+            }
+            if ($userId > 0) {
+                //第一次登陆成功送TB
+                (new MiningModel())->createRegisterMiningRecord($userId);
             }
             return $userId;
         } catch (\Exception $e) {

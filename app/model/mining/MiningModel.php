@@ -12,7 +12,6 @@ namespace App\model\mining;
 
 use App\model\asset\AssetModel;
 use App\model\BaseModel;
-use App\model\currency\CurrencyModel;
 use App\model\PdoModel;
 use App\model\reward\RewardModel;
 use Config\db\MysqlConfig;
@@ -75,6 +74,61 @@ class MiningModel extends BaseModel
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    /**
+     * 随机分配
+     *
+     * @param float $total
+     * @param int $num
+     * @param float $min
+     * @return array
+     */
+    private function randomNum(float $total, int $num, float $min = 0.01)
+    {
+        $result = [];
+        for ($i = 1; $i < $num; $i++) {
+            $safeTotal = ($total - ($num - $i) * $min) / ($num - $i);//随机安全上限
+            $money = mt_rand($min * 100, $safeTotal * 100) / 100;
+            $total = $total - $money;
+            $result[] = $money;
+        }
+        $result[] = $total;
+        return $result;
+    }
+
+    /**
+     * 用户新注册默认赠送糖果
+     *
+     * @param int $userId
+     * @return int
+     */
+    public function createRegisterMiningRecord(int $userId = 0)
+    {
+        if (empty($userId)) {
+            return 0;
+        }
+        //时间
+        $effectiveTime = time();
+        $nextDate = date('Y-m-d', $effectiveTime + 86400);   //次日日期
+        $deadTime = strtotime("{$nextDate} 03:00:00");                  //次日凌晨3点失效 未领取失效时间戳
+
+        //奖励
+        $currencyId = 1;
+        $currencyName = 'TB';
+
+        //状态
+        $miningStatus = MiningModel::MINING_STATUS_1;   //待领取
+        $randomNum = $this->randomNum(mt_rand(3, 5), 6);
+        if (empty($randomNum)) {
+            return 0;
+        }
+        $sql = "INSERT INTO `candy_mining` (user_id, mining_status, currency_id, currency_name, currency_number, effective_time, dead_time) VALUES";
+        foreach ($randomNum as $currencyNumber) {
+            $sql .= " ({$userId}, {$miningStatus}, {$currencyId}, '{$currencyName}', {$currencyNumber}, {$effectiveTime}, {$deadTime}),";
+        }
+        $sql = rtrim($sql, ',');
+        return PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_mining')->execute($sql);
     }
 
     /**
