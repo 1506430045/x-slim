@@ -86,6 +86,9 @@ class InviteModel extends BaseModel
                 ->where('invite_status', '=', self::INVITE_STATUS_0)
                 ->update($data);
             if ($re) {
+                //同步邀请数到redis zset
+
+                //发放邀请奖励
                 (new RewardModel)->createRewardRecord($inviter, RewardModel::REWARD_TYPE_3, $row['id'], $row, $description);
             }
             return $re;
@@ -121,5 +124,16 @@ class InviteModel extends BaseModel
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    /**
+     * 获取邀请排行
+     *
+     * @return array
+     */
+    public function getInviteRankList()
+    {
+
+        return [];
     }
 }

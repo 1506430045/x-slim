@@ -13,7 +13,9 @@ namespace App\model\reward;
 use App\model\asset\AssetModel;
 use App\model\BaseModel;
 use App\model\PdoModel;
+use App\model\RedisModel;
 use Config\db\MysqlConfig;
+use Config\db\RedisConfig;
 use Util\CacheUtil;
 use Util\LoggerUtil;
 
@@ -61,6 +63,40 @@ class RewardModel extends BaseModel
         } catch (\Exception $e) {
             LoggerUtil::getInstance()->info(sprintf("创建奖励记录异常，params=%s, exception=%s", func_get_args(), $e->getMessage()));
             return false;
+        }
+    }
+
+    /**
+     * 获取奖励排行
+     *
+     * @return array
+     */
+    public function getRewardRankList()
+    {
+        $key = sprintf('get:reward:list:%s', date('YmdH'));
+        if ($list = CacheUtil::getCache($key)) {
+            return $list;
+        }
+        $rankLastNumber = RedisRewardModel::getRankLastNumber();
+        try {
+            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table($this->table)
+                ->where('currency_id', '=', 1)
+                ->where('currency_number', '>=', $rankLastNumber)
+                ->order('currency_number DESC')
+                ->limit(100)
+                ->getList();
+            if (empty($list)) {
+                CacheUtil::setCache($key, $list, 1);
+                return [];
+            } else {
+                CacheUtil::setCache($key, $list, 3600);
+                $endRow = end($list);
+                $rankLastNumber = $endRow['currency_number'];
+                RedisRewardModel::setRankLastNumber($rankLastNumber);
+                return $list;
+            }
+        } catch (\Exception $e) {
+            return [];
         }
     }
 
