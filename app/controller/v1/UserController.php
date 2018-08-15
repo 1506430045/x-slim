@@ -32,7 +32,7 @@ class UserController extends BaseController
         $ret = WechatModel::getOpenId($code);
 
         if (empty($ret['status']) || empty($ret['data']['session_key'])) {
-            LoggerUtil::getInstance()->info($ret['message'] ?? '请稍后再试');
+            LoggerUtil::getInstance()->info(json_encode($ret));
             $this->renderJson(500, $ret['message'] ?? '请稍后再试');
         }
         $sessionKey = $ret['data']['session_key'];
