@@ -14,6 +14,7 @@ use App\model\asset\AssetModel;
 use App\model\task\TaskModel;
 use App\model\user\UserModel;
 use App\model\wechat\WechatModel;
+use Util\LoggerUtil;
 use Util\SmsUtil;
 
 class UserController extends BaseController
@@ -31,6 +32,7 @@ class UserController extends BaseController
         $ret = WechatModel::getOpenId($code);
 
         if (empty($ret['status']) || empty($ret['data']['session_key'])) {
+            LoggerUtil::getInstance()->info($ret['message'] ?? '请稍后再试');
             $this->renderJson(500, $ret['message'] ?? '请稍后再试');
         }
         $sessionKey = $ret['data']['session_key'];
