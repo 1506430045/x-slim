@@ -27,6 +27,11 @@ class BaseController extends \App\controller\BaseController
     {
         parent::__construct($request, $response);
         $this->checkToken();    //校验是否登录
+        $this->appendInfo = [
+            'open_id' => $this->openId,
+            'session_key' => $this->sessionKey,
+            'user_id' => $this->userId
+        ];
     }
 
     /**

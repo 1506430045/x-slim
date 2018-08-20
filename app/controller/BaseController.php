@@ -29,6 +29,8 @@ class BaseController
 
     protected $path;
 
+    protected $appendInfo = [];
+
     public function __construct(Request $request, Response $response)
     {
         $this->request = $request;
@@ -121,7 +123,7 @@ class BaseController
         $params = json_encode($this->params, JSON_UNESCAPED_UNICODE);
         $return = empty($this->data) ? json_encode(new \stdClass()) : json_encode($this->data, JSON_UNESCAPED_UNICODE);
 
-        $log = sprintf("%s|%s|%s|%s|%d|%s|%s", $this->request->getMethod(), $this->path, $time, $params, $this->code, $this->message, $return);
+        $log = sprintf("%s|%s|%s|%s|%d|%s|%s|%s", $this->request->getMethod(), $this->path, $time, $params, $this->code, $this->message, $return, json_encode($this->appendInfo));
 
         LoggerUtil::getInstance()->accessLog($log);
     }
