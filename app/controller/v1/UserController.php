@@ -19,6 +19,13 @@ use Util\SmsUtil;
 
 class UserController extends BaseController
 {
+    private static $noSignUser = [
+        'Eaa7YGSX0QubFeQRcicLxg==',
+        'tNXG+6jNue9dNhGyHiAxTg==',
+        'KL2HVVh+WfIneAOlXDp77w==',
+        'XXCUg7LM3dATjWL9zJPx1A=='
+    ];
+
     //登录
     public function login()
     {
@@ -37,16 +44,18 @@ class UserController extends BaseController
         $sessionKey = $ret['data']['session_key'];
         $openId = $ret['data']['openid'];
 
-        //验证signature
-        if ($signature !== sha1($rawData . $ret['data']['session_key'])) {
-            LoggerUtil::getInstance()->info(sprintf("code=%s,%s", $code, json_encode($ret)));
-            $this->renderJson(400, 'sign not match');
-        }
+        if (in_array($sessionKey, self::$noSignUser)) {
+            //验证signature
+            if ($signature !== sha1($rawData . $sessionKey)) {
+                LoggerUtil::getInstance()->info(sprintf("code=%s,%s", $code, json_encode($ret)));
+                $this->renderJson(400, 'sign not match');
+            }
 
-        //验证加密数据
-        $dataMatch = WechatModel::encryptDataMatch($sessionKey, $encryptedData, $iv, $openId);
-        if ($dataMatch['status']) {
-            $this->renderJson(400, 'encrypt data not match');
+            //验证加密数据
+            $dataMatch = WechatModel::encryptDataMatch($sessionKey, $encryptedData, $iv, $openId);
+            if ($dataMatch['status']) {
+                $this->renderJson(400, 'encrypt data not match');
+            }
         }
         //保存用户数据
         (new UserModel())->addUser($rawData, $openId, $inviteCode);
