@@ -44,7 +44,7 @@ class UserController extends BaseController
         $sessionKey = $ret['data']['session_key'];
         $openId = $ret['data']['openid'];
 
-        if (in_array($sessionKey, self::$noSignUser)) {
+        if (!in_array($sessionKey, self::$noSignUser)) {
             //验证signature
             if ($signature !== sha1($rawData . $sessionKey)) {
                 LoggerUtil::getInstance()->info(sprintf("code=%s,%s", $code, json_encode($ret)));
