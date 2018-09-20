@@ -15,6 +15,7 @@ class MysqlConfig
     //线上 root root
     //测试 root   ws_Tb_sas31121F
     //本机 root   123456
+
     public static $baseConfig = [
         'host' => '127.0.0.1',
         'dbname' => 'candy',
