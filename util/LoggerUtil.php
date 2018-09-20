@@ -27,7 +27,7 @@ class LoggerUtil
 
     private static $_instance;
 
-    private function __construct($logPath = '/var/log/candy-api')
+    private function __construct($logPath = '/data/logs/candy-api')
     {
         $this->logPath = $logPath;
         $this->logDate = date('Y-m-d', $_SERVER['REQUEST_TIME']);
@@ -40,7 +40,7 @@ class LoggerUtil
      * @param string $logPath
      * @return LoggerUtil
      */
-    public static function getInstance($logPath = '/var/log/candy-api')
+    public static function getInstance($logPath = '/data/logs/candy-api')
     {
         if (!empty(self::$_instance) && self::$_instance instanceof self) {
             return self::$_instance;

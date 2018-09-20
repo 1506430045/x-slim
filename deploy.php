@@ -8,7 +8,7 @@ require 'recipe/common.php';
 set('application', 'candy-api');
 
 // Project repository
-set('repository', 'https://github.com/thinkbitpro/candy-api.git');
+set('repository', 'https://gitee.com/xiangqian/candy-api.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true);
