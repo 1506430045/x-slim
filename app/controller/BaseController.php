@@ -48,6 +48,7 @@ class BaseController
      */
     private function checkMethod($path)
     {
+        $this->renderJson(404, '停机维护');
         if (in_array($path, $this->postAction) && !$this->request->isPost()) {
             $this->renderJson(404, 'Method not found');
         }
