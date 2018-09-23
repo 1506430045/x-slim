@@ -13,6 +13,7 @@ namespace App\controller\script;
 use App\model\mining\MiningModel;
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use Util\LoggerUtil;
 
 class MiningController
 {
@@ -88,10 +89,12 @@ class MiningController
         $currencyId = 1;
         $currencyName = 'TB';
 
+        LoggerUtil::getInstance()->notice(sprintf("log start"));
         foreach (self::MINING_CREATE_TIME as $time => $currencyNum) {
             $effectiveTime = strtotime($date . ' ' . $time);    //挖矿生效时间
             $diffTime = $effectiveTime - time();
             if ($diffTime > 3600 || $diffTime < 0) {
+                LoggerUtil::getInstance()->notice(sprintf("effectiveTime = %s, diffTime = %s, time = %s", $effectiveTime, $diffTime, time()));
                 continue;
             }
             foreach ($userIds as $userId) {
@@ -101,6 +104,7 @@ class MiningController
                 }
             }
         }
+        LoggerUtil::getInstance()->notice(sprintf("log end"));
         $sql = rtrim($sql, ',');
         return PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_mining')->execute($sql);
     }
