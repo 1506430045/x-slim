@@ -56,7 +56,7 @@ class TestController extends BaseController
     {
         $assetDb = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_asset');
         try {
-            $list = $assetDb->whereIn('user_id', $userIds)->getList(['user_id', 'currency_number']);
+            $list = $assetDb->whereIn('user_id', $userIds)->limit(200)->getList(['user_id', 'currency_number']);
             return array_column($list, 'currency_number', 'user_id');
         } catch (\Exception $e) {
             return [];
