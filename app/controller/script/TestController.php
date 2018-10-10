@@ -11,6 +11,7 @@ namespace App\controller\script;
 
 use App\model\PdoModel;
 use Config\db\MysqlConfig;
+use function GuzzleHttp\Psr7\str;
 use Util\AesUtil;
 
 class TestController extends BaseController
@@ -35,8 +36,10 @@ class TestController extends BaseController
             $id = $list[count($list) - 1]['id'];
             $userIds = array_column($list, 'id');
             $assetList = $this->getAssetByUserIds($userIds);
+            $phone = empty($v['phone']) ? '' : AesUtil::decrypt($v['phone']);
+            $nickname = str_replace(',', '', $v['nickname']);
             foreach ($list as $v) {
-                echo sprintf("%s,%s,%s,%s", $v['id'], $v['nickname'], AesUtil::decrypt($v['phone']), round($assetList[$v['id']], 2)) . PHP_EOL;
+                echo sprintf("%s,%s,%s,%s", $v['id'], $nickname, $phone, round($assetList[$v['id']], 2)) . PHP_EOL;
             }
             sleep(1);
         }
