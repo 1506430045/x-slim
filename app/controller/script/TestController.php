@@ -36,9 +36,9 @@ class TestController extends BaseController
             $id = $list[count($list) - 1]['id'];
             $userIds = array_column($list, 'id');
             $assetList = $this->getAssetByUserIds($userIds);
-            $phone = empty($v['phone']) ? '' : AesUtil::decrypt($v['phone']);
-            $nickname = str_replace(',', '', $v['nickname']);
             foreach ($list as $v) {
+                $phone = empty($v['phone']) ? '' : AesUtil::decrypt($v['phone']);
+                $nickname = str_replace(',', '', $v['nickname']);
                 echo sprintf("%s,%s,%s,%s", $v['id'], $nickname, $phone, round($assetList[$v['id']], 2)) . PHP_EOL;
             }
             sleep(1);
