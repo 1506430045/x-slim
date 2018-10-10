@@ -38,6 +38,7 @@ class TestController extends BaseController
             foreach ($list as $v) {
                 echo sprintf("%s,%s,%s,%s", $v['id'], $v['nickname'], AesUtil::decrypt($v['phone']), $assetList[$v['id']]) . PHP_EOL;
             }
+            sleep(1);
         }
     }
 
