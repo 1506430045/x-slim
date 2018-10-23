@@ -1,6 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 脚本
+ *
  * User: forward
  * Date: 2018/7/31
  * Time: 下午1:42
@@ -9,60 +10,17 @@
 namespace App\controller\script;
 
 
-use App\model\PdoModel;
-use Config\db\MysqlConfig;
-use function GuzzleHttp\Psr7\str;
-use Util\AesUtil;
+use App\model\study\SearchModel;
+use App\model\study\SortModel;
 
 class TestController extends BaseController
 {
+    //php public/script.php -c Test -a test
     public function test()
     {
-//        try {
-//            $list = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user')->getList(['id', 'nickname', 'phone']);
-//            foreach ($list as &$v) {
-//                $v['phone_1'] = empty($v['phone']) ? '' : AesUtil::decrypt($v['phone']);
-//            }
-//            var_dump($list);
-//        } catch (\Exception $e) {
-//            var_dump([]);
-//        }
-        $id = 0;
-        while (true) {
-            $list = $this->getUserListById($id);
-            if (empty($list)) {
-                exit();
-            }
-            $id = $list[count($list) - 1]['id'];
-            $userIds = array_column($list, 'id');
-            $assetList = $this->getAssetByUserIds($userIds);
-            foreach ($list as $v) {
-                $phone = empty($v['phone']) ? '' : AesUtil::decrypt($v['phone']);
-                $nickname = str_replace(',', '', $v['nickname']);
-                echo sprintf("%s,%s,%s,%s", $v['id'], $nickname, $phone, round($assetList[$v['id']], 2)) . PHP_EOL;
-            }
-            sleep(1);
-        }
-    }
-
-    public function getUserListById(int $id = 0)
-    {
-        $userDb = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_user');
-        try {
-            return $userDb->where('id', '>', $id)->limit(200)->getList(['id', 'nickname', 'phone']);
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-
-    public function getAssetByUserIds(array $userIds)
-    {
-        $assetDb = PdoModel::getInstance(MysqlConfig::$baseConfig)->table('candy_asset');
-        try {
-            $list = $assetDb->whereIn('user_id', $userIds)->limit(200)->getList(['user_id', 'currency_number']);
-            return array_column($list, 'currency_number', 'user_id');
-        } catch (\Exception $e) {
-            return [];
-        }
+        $arr = [2, 4, 1, 88, 22, 33, 55, 86];
+        $result = (new SortModel($arr))->insertSort();
+        $searchIndex = (new SearchModel($result, 0))->binarySearch();
+        var_dump($result, $searchIndex);
     }
 }

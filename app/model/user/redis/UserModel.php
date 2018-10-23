@@ -10,7 +10,6 @@ namespace App\model\user\redis;
 
 
 use App\model\RedisModel;
-use App\model\task\TaskModel;
 use Config\db\RedisConfig;
 use Util\LoggerUtil;
 

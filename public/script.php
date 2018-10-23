@@ -12,7 +12,6 @@ require __DIR__ . '/../vendor/autoload.php';
 $param = getopt("c:a:");
 
 if (empty($param['c']) || empty($param['a'])) {
-    var_dump($param);die;
     exit(json_encode([
         'code' => 400,
         'message' => '参数有误,请检查',
