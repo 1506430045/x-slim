@@ -18,15 +18,16 @@ class MysqlConfig
 
     public static $baseConfig = [
         'host' => '127.0.0.1',
-        'dbname' => 'candy',
+        'dbname' => 'c2c',
         'username' => 'root',
-        'password' => 'root',
+        'password' => '123456',
         'charset' => 'utf8mb4',
         'options' => [
             \PDO::ATTR_STRINGIFY_FETCHES => false,
             \PDO::ATTR_EMULATE_PREPARES => false,
             \PDO::MYSQL_ATTR_INIT_COMMAND => "set names utf8mb4",
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_AUTOCOMMIT => 0
         ]
     ];
 }

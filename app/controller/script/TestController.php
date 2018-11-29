@@ -10,17 +10,46 @@
 namespace App\controller\script;
 
 
-use App\model\study\SearchModel;
+use App\model\PdoModel;
+use App\model\study\Node;
 use App\model\study\SortModel;
+use App\model\study\TestModel;
+use App\model\study\TreeModel;
+use Config\db\MysqlConfig;
+use function GuzzleHttp\Psr7\str;
 
 class TestController extends BaseController
 {
+
     //php public/script.php -c Test -a test
     public function test()
     {
-        $arr = [2, 4, 1, 88, 22, 33, 55, 86];
-        $result = (new SortModel($arr))->insertSort();
-        $searchIndex = (new SearchModel($result, 0))->binarySearch();
-        var_dump($result, $searchIndex);
+        $arr = [
+            3, 6, 5, 0, 9, -1, 2, 88, 67
+        ];
+        $model = new SortModel();
+        $res = $model->heapSort($arr);
+        var_dump($res);
+        die;
+        $a = new Node('a');
+        $b = new Node('b');
+        $c = new Node('c');
+        $d = new Node('d');
+        $e = new Node('e');
+        $f = new Node('f');
+        $g = new Node('g');
+        $h = new Node('h');
+        $i = new Node('i');
+
+        $a->leftChild = $b;
+        $a->rightChild = $c;
+        $b->leftChild = $d;
+        $b->rightChild = $g;
+        $c->leftChild = $e;
+        $c->rightChild = $f;
+        $d->leftChild = $h;
+        $d->rightChild = $i;
+
+        TreeModel::postOrder2($a);
     }
 }

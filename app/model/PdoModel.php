@@ -29,7 +29,7 @@ class PdoModel
     {
         $this->dbName = $dbConfig['dbname'];
         $this->dbConfig = $dbConfig;
-        $dsn = "mysql:host={$this->dbConfig['host']};dbname={$this->dbName}";
+        $dsn = "mysql:host={$this->dbConfig['host']};dbname={$this->dbName};port=3306;charset=UTF8";
         $this->dbh = new \PDO($dsn, $this->dbConfig['username'], $this->dbConfig['password'], $this->dbConfig['options']);
     }
 
@@ -43,9 +43,9 @@ class PdoModel
     {
         ksort($dbConfig);
         $key = md5(serialize($dbConfig));
-        if (isset(self::$_instances[$key]) && self::$_instances[$key] instanceof self && self::$_instances[$key]->ping()) {
-            return self::$_instances[$key];
-        }
+//        if (isset(self::$_instances[$key]) && self::$_instances[$key] instanceof self && self::$_instances[$key]->ping()) {
+//            return self::$_instances[$key];
+//        }
         self::$_instances[$key] = new self($dbConfig);
         return self::$_instances[$key];
     }
@@ -298,7 +298,8 @@ class PdoModel
             $this->resetCondition();
             return $re ? intval($this->dbh->lastInsertId()) : 0;
         } catch (\PDOException $e) {
-            LoggerUtil::getInstance()->notice($e->getMessage(), ['method' => __METHOD__, 'params' => $arr]);
+            exit(json_encode($e->getMessage()));
+//            LoggerUtil::getInstance()->notice($e->getMessage(), ['method' => __METHOD__, 'params' => $arr]);
             $this->resetCondition();
             if ($e->getCode() === '23000') {
                 return -1;
@@ -320,6 +321,7 @@ class PdoModel
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\PDOException $e) {
+            exit(json_encode($e->getMessage()));
             return 0;
         }
     }
