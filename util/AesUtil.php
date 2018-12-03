@@ -13,8 +13,8 @@ use PhpAes\Aes;
 
 class AesUtil
 {
-    const SECRET_KEY = 'zJMwvJtwSHsSCsdD';  //秘钥
-    const IV = 'abcdef1234567890';          //初始化向量
+    const SECRET_KEY = '';  //秘钥
+    const IV = '';          //初始化向量
 
     /**
      * 加密

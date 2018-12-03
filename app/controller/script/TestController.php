@@ -9,14 +9,9 @@
 
 namespace App\controller\script;
 
-
-use App\model\PdoModel;
 use App\model\study\Node;
 use App\model\study\SortModel;
-use App\model\study\TestModel;
 use App\model\study\TreeModel;
-use Config\db\MysqlConfig;
-use function GuzzleHttp\Psr7\str;
 
 class TestController extends BaseController
 {
@@ -28,7 +23,7 @@ class TestController extends BaseController
             3, 6, 5, 0, 9, -1, 2, 88, 67
         ];
         $model = new SortModel();
-        $res = $model->heapSort($arr);
+        $res = $model->mergeSort($arr);
         var_dump($res);
         die;
         $a = new Node('a');

@@ -65,6 +65,8 @@ class BaseController
      */
     public function get($key, string $default = '')
     {
+        //todo htmlspecialchars  把预定义的字符 "<" （小于）和 ">" （大于）转换为 HTML 实体：
+        //todo addslashes    函数返回在预定义字符之前添加反斜杠的字符串。
         return $this->params[$key] ?? $default;
     }
 
@@ -119,6 +121,7 @@ class BaseController
      */
     public function __destruct()
     {
+        fastcgi_finish_request();
         $time = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
         $params = json_encode($this->params, JSON_UNESCAPED_UNICODE);
         $return = empty($this->data) ? json_encode(new \stdClass()) : json_encode($this->data, JSON_UNESCAPED_UNICODE);

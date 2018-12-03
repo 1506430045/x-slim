@@ -60,4 +60,9 @@ class TreeModel
             echo $root->value . PHP_EOL;
         }
     }
+
+    public function getLastCommonAncestor()
+    {
+
+    }
 }

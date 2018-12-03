@@ -184,4 +184,45 @@ class SortModel
         }
         return $arr;
     }
+
+    /**
+     * 归并排序
+     *
+     * @param array $arr
+     * @return array
+     */
+    public function mergeSort(array $arr)
+    {
+        $count = count($arr);
+        if ($count <= 1) {
+            return $arr;
+        }
+        $mid = intval($count / 2);
+        $leftArr = array_slice($arr, 0, $mid);
+        $rightArr = array_slice($arr, $mid);
+        $this->mergeSort($leftArr);
+        $this->mergeSort($rightArr);
+        return $this->merge($leftArr, $rightArr);
+    }
+
+    /**
+     * 顺序合并俩个数组
+     *
+     * @param array $arrA
+     * @param array $arrB
+     * @return array
+     */
+    public function merge(array $arrA, array $arrB)
+    {
+        $arrC = [];
+        while (count($arrA) && count($arrB)) {
+            $arrC[] = $arrA[0] < $arrB[0] ? array_shift($arrA) : array_shift($arrB);
+        }
+        return array_merge($arrC, $arrB, $arrC);
+    }
+
+    public function shellSort(array $arr)
+    {
+
+    }
 }

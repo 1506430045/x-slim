@@ -298,7 +298,6 @@ class PdoModel
             $this->resetCondition();
             return $re ? intval($this->dbh->lastInsertId()) : 0;
         } catch (\PDOException $e) {
-            exit(json_encode($e->getMessage()));
 //            LoggerUtil::getInstance()->notice($e->getMessage(), ['method' => __METHOD__, 'params' => $arr]);
             $this->resetCondition();
             if ($e->getCode() === '23000') {
@@ -321,7 +320,6 @@ class PdoModel
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\PDOException $e) {
-            exit(json_encode($e->getMessage()));
             return 0;
         }
     }

@@ -166,33 +166,4 @@ class UserModel
         $code = RedisModel::getInstance(RedisConfig::$baseConfig)->redis->get($key);
         return $code ?: '';
     }
-
-    /**
-     * 设置用户当日签到标记
-     *
-     * @param int $userId
-     * @return int
-     */
-    public function setUserSignFlag(int $userId)
-    {
-        $timeEnd = strtotime(date('Y-m-d 23:59:59'));   //当日23:59:59
-        $key = sprintf(self::USER_SIGN_IN_FLAG, $userId);
-        $redis = RedisModel::getInstance(RedisConfig::$baseConfig)->redis;
-        $re1 = $redis->setnx($key, date('Y-m-d H:i:s'));
-        $re2 = false;
-        if ($re1) { //签到成功
-            $re2 = $redis->expireAt($key, $timeEnd);
-        }
-        if ($re1 && !$re2) {
-            LoggerUtil::getInstance()->alert(sprintf("签到数据异常, params=%s, re1=%d, re2=%d"));
-        }
-
-        if (!$re1) {        //当日已签到，不可重复签到
-            return TaskModel::SIGN_IN_STATUS_2;
-        }
-        if ($re1 && $re2) { //签到成功
-            return TaskModel::SIGN_IN_STATUS_1;
-        }
-        return TaskModel::SIGN_IN_STATUS_1;   //设置失败或设置异常
-    }
 }

@@ -25,23 +25,3 @@ $app->get('/v1/{controller}/{action}', function (Request $request, Response $res
     $params = $request->getParams();
     $o->$action($params);
 });
-
-//登录
-$app->post('/v1/login', function (Request $request, Response $response, $args) {
-    (new App\controller\v1\UserController($request, $response))->login();
-});
-
-//签到
-$app->post('/v1/signIn', function (Request $request, Response $response, $args) {
-    (new App\controller\v1\UserController($request, $response))->signIn();
-});
-
-//绑定手机号
-$app->post('/v1/phone/bind', function (Request $request, Response $response, $args) {
-    (new App\controller\v1\UserController($request, $response))->bindPhone();
-});
-
-//领取奖励
-$app->post('/v1/reward', function (Request $request, Response $response, $args) {
-    (new App\controller\v1\RewardController($request, $response))->reward();
-});
